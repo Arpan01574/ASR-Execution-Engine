@@ -1,0 +1,1936 @@
+//@version=6
+// =============================================================================================
+//  ARPAN'S S&R + SIGNAL ENGINE   (shorttitle: ASR Engine)
+// ---------------------------------------------------------------------------------------------
+//
+//
+//  NEW ENGINES:  structure (BOS / swing state), liquidity (sweep / reclaim),
+//                regime (trend × volatility), 5 setup types.
+//  SCORING:  Zone Quality (0–35) + Setup Quality (0–35) + Context (0–30) = 0–100.
+//  TRADE ACCOUNTING:  WIN / LOSS / BREAKEVEN / TIME_EXIT reported separately.
+//
+//  NON-REPAINTING:  all HTF requests use [1] offset + lookahead_on.
+//  CONFIRMED BARS ONLY:  all state mutations gated by barstate.isconfirmed.
+//
+//  ALERT SETUP:  Create Alert → Condition "ASR Engine" → "Any alert() function call"
+//                → Webhook URL (HTTPS, port 443).  Requires TradingView Essential+.
+//
+//  Not financial advice.  No profitability is promised.
+// =============================================================================================
+strategy("Arpan's S&R + Signal Engine (Strategy)", shorttitle = "ASR Engine Strat", overlay = true,
+     process_orders_on_close = true, initial_capital = 10000, default_qty_type = strategy.percent_of_equity, default_qty_value = 100,
+     commission_type = strategy.commission.percent, commission_value = 0.04, slippage = 2,
+     max_boxes_count = 500, max_labels_count = 500, max_lines_count = 500, max_bars_back = 5000)
+
+// ============================================================================================
+// INPUTS
+// ============================================================================================
+G_CORE  = "1 | Core Engine"
+G_INST  = "2 | Zone Quality Engine"
+G_PIV   = "3 | Pivot Zones S&R"
+G_SD    = "4 | Supply & Demand (MTF)"
+G_SDV   = "5 | S&D Aesthetics"
+G_VOL   = "6 | Volume Filter"
+G_SIG   = "7 | Signal Engine"
+G_RISK  = "8 | Risk Model & Costs"
+G_STRUCT = "9 | Market Structure"
+G_LIQ   = "10 | Liquidity Engine"
+G_REG   = "11 | Regime Engine"
+G_ALR   = "12 | Alerts / Webhook"
+G_UI    = "13 | Dashboard & Visuals"
+
+// --- 1 | CORE ENGINE ---
+maxBarsBack  = input.int(3000, "Lookback Limit (bars)", minval = 200, group = G_CORE, tooltip = "Performance gate only. The canonical Python engine processes all bars.")
+drawMode     = input.string("Boxes", "Draw Mode", options = ["Boxes", "Lines"], group = G_CORE)
+invalidation = input.string("Close", "Zone Invalidation", options = ["Close", "Wick"], group = G_CORE)
+useMTF       = input.bool(true, "Use HTF Swing Confluence", group = G_CORE)
+htfRes       = input.timeframe("240", "Higher Timeframe", group = G_CORE)
+htfPivLen    = input.int(5, "HTF Swing Length", minval = 2, maxval = 20, group = G_CORE)
+htfTolATR    = input.float(0.35, "HTF Overlap Tolerance (ATR)", minval = 0.0, step = 0.05, group = G_CORE)
+useAutoAsset = input.bool(true, "Auto-Tune Asset Matrix", group = G_CORE)
+assetOverride = input.string("Auto", "Asset Override", options = ["Auto", "CRYPTO", "GOLD", "SILVER", "FOREX", "INDEX", "ENERGY", "MACRO", "OTHER"], group = G_CORE, tooltip = "Force asset class instead of auto-detection.")
+marketOverride = input.string("Auto", "Market Type Override", options = ["Auto", "SPOT", "PERPETUAL", "FUTURES", "FOREX", "CFD", "OTHER"], group = G_CORE, tooltip = "Force market type. SPOT disables shorts.")
+
+// --- 2 | ZONE QUALITY ENGINE ---
+momentumBodyMult = input.float(0.5, "Momentum Body Mult", minval = 0.1, step = 0.05, group = G_INST, tooltip = "Ignored when Auto-Tune is on.")
+momentumCount    = input.int(2, "Momentum Count", minval = 1, group = G_INST)
+maxZoneSizeATR   = input.float(1.8, "Max Zone Size (ATR)", minval = 0.3, step = 0.1, group = G_INST)
+mergeOverlap     = input.bool(true, "Merge Overlapping Zones", group = G_INST)
+minZoneDuration  = input.int(3, "Min Zone Age From Confirm (Bars)", minval = 0, group = G_INST, tooltip = "BUG-05 fix: age measured from confirmation, not pivot.")
+mergeAtrFrac     = input.float(0.3, "Zone Merge Dist (ATR)", minval = 0.0, step = 0.05, group = G_INST)
+decayFactor      = input.int(800, "Decay Factor (Bars)", minval = 50, group = G_INST, tooltip = "Ignored when Auto-Tune is on.")
+displacementMult = input.float(1.5, "Displacement Body (ATR mult)", minval = 0.5, step = 0.1, group = G_INST, tooltip = "BUG/MATH-03 fix: replaces near-vacuous momentum filter. Bar body must exceed this × ATR.")
+
+// --- 3 | PIVOT ZONES ---
+pivL        = input.int(12, "Look Left", minval = 1, group = G_PIV)
+pivR        = input.int(12, "Look Right", minval = 1, maxval = 50, group = G_PIV)
+nPiv        = input.int(10, "Max Pivot Memory", minval = 2, maxval = 40, group = G_PIV)
+atrLen      = input.int(20, "ATR Length", minval = 1, group = G_PIV)
+zoneMult    = input.float(0.5, "Zone Width (ATR)", minval = 0.05, step = 0.05, group = G_PIV)
+maxPct      = input.float(4.0, "Max Zone Percent", minval = 0.1, step = 0.1, group = G_PIV)
+extendR     = input.bool(false, "Extend Right", group = G_PIV)
+lLab        = input.bool(false, "Show Level Labels", group = G_PIV)
+flipZones   = input.bool(true, "Flip Zones on Break (Polarity)", group = G_PIV)
+keepHistory = input.bool(true, "Show Elite Broken Zones", group = G_PIV)
+dhighs      = input.bool(true, "Detect Pivot Highs", group = G_PIV)
+dlows       = input.bool(true, "Detect Pivot Lows", group = G_PIV)
+bullBorder  = input.color(color.new(#64b5f6, 60), "Bull Border", group = G_PIV)
+bearBorder  = input.color(color.new(#ffeb3b, 60), "Bear Border", group = G_PIV)
+
+// --- 4 | SUPPLY & DEMAND (MTF) ---
+candleDifferenceScale = input.float(1.8, "Zone Difference Scale", minval = 1.0, step = 0.1, group = G_SD)
+zoneOffset  = input.int(15, "Zone Extension (Bars)", minval = 1, group = G_SD)
+maxMtfBoxes = input.int(20, "Max S&D Boxes Per Side", minval = 2, maxval = 80, group = G_SD)
+display30m  = input.bool(false, "Show 30m Zones", group = G_SD)
+display1h   = input.bool(true, "Show 1h Zones", group = G_SD)
+display4h   = input.bool(true, "Show 4h Zones", group = G_SD)
+displayD    = input.bool(false, "Show Daily Zones", group = G_SD)
+displayW    = input.bool(false, "Show Weekly Zones", group = G_SD)
+
+// --- 5 | S&D AESTHETICS ---
+supplyEnable    = input.bool(true, "Enable Supply Zones", group = G_SDV)
+supplyColor     = input.color(color.rgb(242, 54, 69, 94), "Supply BG", group = G_SDV)
+supplyBorderCol = input.color(color.rgb(209, 212, 220, 90), "Supply Brdr", group = G_SDV)
+demandEnable    = input.bool(true, "Enable Demand Zones", group = G_SDV)
+demandColor     = input.color(color.rgb(76, 175, 80, 94), "Demand BG", group = G_SDV)
+demandBorderCol = input.color(color.rgb(209, 212, 220, 80), "Demand Brdr", group = G_SDV)
+textEnable      = input.bool(true, "Display S&D Text", group = G_SDV)
+textColor       = input.color(color.rgb(255, 255, 255), "Text Color", group = G_SDV)
+textSize        = input.string("Small", "Text Size", options = ["Auto", "Tiny", "Small", "Normal", "Large", "Huge"], group = G_SDV)
+
+// --- 6 | VOLUME FILTER ---
+volLen    = input.int(20, "Volume SMA Length", minval = 2, group = G_VOL)
+volThresh = input.float(20.0, "Volume Surge Threshold (%)", group = G_VOL)
+
+// --- 7 | SIGNAL ENGINE ---
+sigEnable     = input.bool(true, "Enable Signals", group = G_SIG)
+allowLong     = input.bool(true, "Allow Longs", group = G_SIG)
+allowShort    = input.bool(true, "Allow Shorts", group = G_SIG)
+sigMinTier    = input.string("Strong", "Minimum Zone Tier", options = ["Strong", "Elite"], group = G_SIG)
+sigMinScore   = input.int(55, "Minimum Signal Score (0-100)", minval = 0, maxval = 100, group = G_SIG, tooltip = "Default 55. Score is recalibrated; see docs.")
+sigMinWick    = input.float(0.30, "Min Rejection Wick (fraction of range)", minval = 0.0, maxval = 1.0, step = 0.05, group = G_SIG)
+sigReqDir     = input.bool(false, "Require Candle Direction", group = G_SIG)
+sigReqVol     = input.bool(false, "Require Volume Surge", group = G_SIG)
+maxSigPerZone = input.int(2, "Max Signals Per Zone", minval = 1, maxval = 10, group = G_SIG)
+sigCooldown   = input.int(6, "Cooldown (Bars)", minval = 0, group = G_SIG)
+maxSigPerDay  = input.int(4, "Max Signals Per Day (UTC)", minval = 1, maxval = 50, group = G_SIG)
+trendMode     = input.string("Soft", "HTF Trend Filter", options = ["Off", "Soft", "Hard"], group = G_SIG)
+trendTF       = input.timeframe("240", "Trend Timeframe", group = G_SIG)
+trendLen      = input.int(50, "Trend EMA Length", minval = 5, group = G_SIG)
+sessionStr    = input.session("0000-2359", "Allowed Session (UTC)", group = G_SIG)
+skipWeekends  = input.bool(false, "Skip Weekends (Sat/Sun UTC)", group = G_SIG)
+// Setup type toggles
+enableZoneReject    = input.bool(true, "Setup: ZONE_REJECT", group = G_SIG)
+enableFlipRetest    = input.bool(true, "Setup: FLIP_RETEST", group = G_SIG)
+enableSweepReclaim  = input.bool(true, "Setup: SWEEP_RECLAIM", group = G_SIG, tooltip = "TEST status — liquidity sweep + reclaim at zone/level.")
+enableDisplacement  = input.bool(false, "Setup: DISPLACEMENT_RETEST", group = G_SIG, tooltip = "TEST status — retest of displacement origin.")
+enableBosRetest     = input.bool(false, "Setup: BOS_RETEST", group = G_SIG, tooltip = "TEST status — retest after break of structure.")
+
+// --- 8 | RISK MODEL & COSTS ---
+slBufferATR  = input.float(0.50, "SL Buffer (ATR)", minval = 0.0, step = 0.05, group = G_RISK)
+maxRiskATR   = input.float(2.5, "Max Risk (ATR)", minval = 0.3, step = 0.1, group = G_RISK)
+tp1R         = input.float(1.5, "TP1 (R)", minval = 0.2, step = 0.1, group = G_RISK)
+tp2R         = input.float(3.0, "TP2 (R)", minval = 0.5, step = 0.1, group = G_RISK)
+tp1Frac      = input.float(33.0, "Close % At TP1", minval = 10.0, maxval = 100.0, step = 5.0, group = G_RISK)
+tp2Frac      = input.float(33.0, "Close % At TP2", minval = 0.0, maxval = 100.0, step = 5.0, group = G_RISK)
+trailATR     = input.float(1.5, "Trailing Stop (ATR)", minval = 0.5, step = 0.1, group = G_RISK)
+minRoomR     = input.float(2.0, "Min Room To Opposing Zone (R)", minval = 0.0, step = 0.25, group = G_RISK)
+timeStopBars = input.int(60, "Time Stop (Bars)", minval = 5, group = G_RISK)
+feePct       = input.float(0.04, "Fee Per Side (%)", minval = 0.0, step = 0.01, group = G_RISK, tooltip = "Binance Futures taker default 0.04%.")
+slipPct      = input.float(0.02, "Slippage Per Side (%)", minval = 0.0, step = 0.01, group = G_RISK)
+maxCostR     = input.float(0.15, "Max Round-Trip Cost (R)", minval = 0.0, step = 0.05, group = G_RISK, tooltip = "Tightened from 0.20 to 0.15.")
+riskPctEq    = input.float(0.5, "Risk Per Trade (% equity)", minval = 0.01, maxval = 5.0, step = 0.05, group = G_RISK)
+sigTtlMult   = input.float(2.0, "Signal TTL (× bar period)", minval = 0.5, step = 0.5, group = G_RISK, tooltip = "Signal expires after this many bar periods.")
+
+// --- 9 | MARKET STRUCTURE ---
+structLen    = input.int(5, "Swing Length", minval = 2, maxval = 20, group = G_STRUCT)
+bosATRMult   = input.float(0.1, "BOS Confirm (ATR beyond swing)", minval = 0.0, step = 0.05, group = G_STRUCT)
+showStructure = input.bool(true, "Show Structure Labels", group = G_STRUCT)
+
+
+// --- FVG logic ---
+bool fvgBull = low > high[2] and close[1] > open[1]
+bool fvgBear = high < low[2] and close[1] < open[1]
+
+// --- 10 | LIQUIDITY ENGINE ---
+eqTol       = input.float(0.15, "Equal High/Low Tolerance (ATR)", minval = 0.01, step = 0.05, group = G_LIQ)
+sweepMinATR = input.float(0.05, "Min Sweep Depth (ATR)", minval = 0.01, step = 0.01, group = G_LIQ)
+reclaimBars = input.int(3, "Max Reclaim Bars", minval = 1, maxval = 10, group = G_LIQ)
+showSweeps  = input.bool(true, "Show Sweep Labels", group = G_LIQ)
+
+// --- 11 | REGIME ENGINE ---
+regimeATRPeriod = input.int(500, "ATR Percentile Window", minval = 50, group = G_REG)
+regimeVolHi     = input.float(75.0, "High Vol Percentile", minval = 50.0, maxval = 99.0, group = G_REG)
+regimeVolLo     = input.float(25.0, "Low Vol Percentile", minval = 1.0, maxval = 50.0, group = G_REG)
+regimeTrendFlat = input.float(0.25, "Trend Flat Band (ATR)", minval = 0.0, step = 0.05, group = G_REG)
+
+// --- 12 | ALERTS / WEBHOOK ---
+alertPass    = input.string("CHANGE_ME", "Webhook Passphrase", group = G_ALR, tooltip = "Used in alert() JSON only. NOT placed in alertcondition() messages.")
+strategyName = input.string("ASR", "Strategy Name", group = G_ALR)
+exchangeName = input.string("BINANCE", "Exchange Tag", group = G_ALR)
+sendExit     = input.bool(true, "Send EXIT Alerts", group = G_ALR)
+hbEnable     = input.bool(false, "Send HEARTBEAT Alerts", group = G_ALR)
+hbBars       = input.int(15, "Heartbeat Every N Bars", minval = 1, group = G_ALR)
+
+// --- 13 | DASHBOARD & VISUALS ---
+showDash   = input.bool(true, "Show Dashboard", group = G_UI)
+dashPos    = input.string("Top Right", "Dashboard Position", options = ["Top Left", "Top Right", "Middle Right", "Bottom Left", "Bottom Right"], group = G_UI)
+showTrades = input.bool(true, "Show Trade Boxes & Labels", group = G_UI)
+keepTrades = input.int(15, "Trades To Keep On Chart", minval = 1, maxval = 60, group = G_UI)
+showHtfEma = input.bool(true, "Show HTF Trend EMA", group = G_UI)
+showVwap   = input.bool(false, "Show Session VWAP", group = G_UI, tooltip = "UTC-day VWAP. TEST feature.")
+maxRetired = input.int(15, "Max Retired Zone Boxes", minval = 0, maxval = 50, group = G_UI, tooltip = "BUG-21 fix: cap retained history boxes.")
+
+// ============================================================================================
+// BUG-16 FIX: Validate TP ordering at load
+// ============================================================================================
+var bool _tpValid = tp2R > tp1R
+if barstate.isfirst and not _tpValid
+    runtime.error("TP2 (" + str.tostring(tp2R) + ") must be greater than TP1 (" + str.tostring(tp1R) + ")")
+
+// ============================================================================================
+// BUG-18 FIX: Block HTF below chart timeframe
+// ============================================================================================
+chartSec   = timeframe.in_seconds()
+htfSec     = timeframe.in_seconds(htfRes)
+trendSec   = timeframe.in_seconds(trendTF)
+if barstate.isfirst and (htfSec < chartSec or trendSec < chartSec)
+    runtime.error("HTF / Trend timeframe must be >= chart timeframe")
+
+// ============================================================================================
+// ASSET DETECTOR  (BUG-19 style: robust, with user override)
+// ============================================================================================
+f_isFxPair(string s) =>
+    bool ok = false
+    if str.length(s) == 6
+        array<string> ccy = array.from("USD", "EUR", "GBP", "JPY", "AUD", "CAD", "CHF", "NZD", "INR", "SEK", "NOK", "DKK", "SGD", "HKD", "MXN", "ZAR", "TRY", "PLN", "CNH")
+        ok := array.includes(ccy, str.substring(s, 0, 3)) and array.includes(ccy, str.substring(s, 3, 6))
+    ok
+
+f_hasPrefix(string s, array<string> prefixes) =>
+    bool hit = false
+    for p in prefixes
+        if str.startswith(s, p)
+            hit := true
+            break
+    hit
+
+f_detectAsset() =>
+    string tkr = str.upper(syminfo.ticker)
+    string rt  = str.upper(syminfo.root)
+    string bc  = na(syminfo.basecurrency) ? "" : str.upper(syminfo.basecurrency)
+    string ty  = syminfo.type
+    bool nonEq = ty != "stock" and ty != "fund" and ty != "dr" and ty != "right" and ty != "warrant" and ty != "structured"
+    array<string> cryptoRoots  = array.from("BTC", "MBT", "ETH", "MET", "SOL", "MSL", "XRP", "MXP", "BNB", "DOGE", "ADA", "LTC", "BCH", "DOT", "AVAX", "LINK", "MATIC", "TRX", "SHIB", "UNI", "ATOM", "XLM", "ETC", "NEAR", "APT", "ARB", "OP", "SUI", "TON", "PEPE", "INJ", "FIL", "AAVE")
+    array<string> cryptoPrefix = array.from("BTC", "ETH", "SOL", "XRP", "BNB", "DOGE", "ADA", "LTC", "BCH", "AVAX", "LINK", "MATIC", "TRX", "SHIB", "XLM")
+    array<string> macroRoots   = array.from("DXY", "VIX", "US02Y", "US03Y", "US05Y", "US10Y", "US20Y", "US30Y", "TNX", "TYX", "FVX", "IRX")
+    array<string> goldRoots    = array.from("GC", "MGC", "QO", "GOLD")
+    array<string> silverRoots  = array.from("SI", "SIL", "QI", "HG", "MHG", "QC", "COPPER", "XCU")
+    array<string> energyRoots  = array.from("CL", "MCL", "QM", "NG", "MNG", "QG", "BZ", "BB", "MBC", "CY", "RB", "HO")
+    array<string> energyPrefix = array.from("XTI", "XBR", "USOIL", "UKOIL", "WTI", "BRENT", "BCO", "CRUDE")
+    array<string> indexRoots   = array.from("ES", "MES", "NQ", "MNQ", "YM", "MYM", "RTY", "M2K", "NKD", "MNK", "FDAX", "FDXM", "FDXS", "FESX", "FSXE", "FTUK", "SPX", "SP500", "US500", "NAS100", "NDX", "NDQ", "USTEC", "US100", "DJI", "US30", "DJ30", "DAX", "DE40", "GER40", "GER30", "UK100", "JP225", "NI225", "HK50", "NIFTY", "BANKNIFTY", "SENSEX")
+    array<string> cmeFxRoots   = array.from("6E", "6J", "6B", "6S", "6A", "6C", "6N", "M6E", "M6A", "M6B", "MJY", "MSF", "MCD", "SIR", "MIR")
+    string res = "OTHER"
+    if ty == "crypto" or (nonEq and (array.includes(cryptoRoots, rt) or array.includes(cryptoRoots, bc) or f_hasPrefix(tkr, cryptoPrefix)))
+        res := "CRYPTO"
+    else if array.includes(macroRoots, rt) or array.includes(macroRoots, tkr)
+        res := "MACRO"
+    else if array.includes(goldRoots, rt) or f_hasPrefix(tkr, array.from("XAU", "GOLD"))
+        res := "GOLD"
+    else if array.includes(silverRoots, rt) or f_hasPrefix(tkr, array.from("XAG", "XCU"))
+        res := "SILVER"
+    else if array.includes(energyRoots, rt) or f_hasPrefix(tkr, energyPrefix)
+        res := "ENERGY"
+    else if ty == "index" or array.includes(indexRoots, rt) or array.includes(indexRoots, tkr)
+        res := "INDEX"
+    else if ty == "forex" or array.includes(cmeFxRoots, rt) or f_isFxPair(tkr)
+        res := "FOREX"
+    res
+
+f_detectMarket() =>
+    string ty = syminfo.type
+    string tkr = str.upper(syminfo.ticker)
+    string res = "OTHER"
+    if ty == "crypto"
+        res := str.contains(tkr, "PERP") or str.contains(tkr, ".P") or str.endswith(tkr, "USDT") ? "PERPETUAL" : "SPOT"
+    else if ty == "forex"
+        res := "FOREX"
+    else if ty == "futures"
+        res := "FUTURES"
+    else if ty == "cfd"
+        res := "CFD"
+    else if ty == "stock" or ty == "fund" or ty == "dr"
+        res := "SPOT"
+    res
+
+var string assetType  = assetOverride != "Auto" ? assetOverride : f_detectAsset()
+var string marketType = marketOverride != "Auto" ? marketOverride : f_detectMarket()
+var bool   isSpot     = marketType == "SPOT"
+
+// ============================================================================================
+// ASSET AUTO-TUNE PARAMETERS
+// ============================================================================================
+int   p_decay = 700
+float p_mom   = 0.50
+int   p_nPiv  = 10
+float p_space = 0.40
+if assetType == "GOLD"
+    p_decay := 600
+    p_nPiv  := 8
+else if assetType == "SILVER"
+    p_decay := 650
+    p_mom   := 0.45
+    p_nPiv  := 8
+else if assetType == "CRYPTO"
+    p_decay := 500
+    p_nPiv  := 8
+    p_space := 0.30
+else if assetType == "FOREX"
+    p_decay := 900
+    p_mom   := 0.40
+    p_space := 0.50
+else if assetType == "INDEX"
+    p_mom   := 0.45
+else if assetType == "ENERGY"
+    p_decay := 800
+    p_mom   := 0.45
+
+int   dyn_decay = useAutoAsset ? p_decay : decayFactor
+float dyn_mom   = useAutoAsset ? p_mom : momentumBodyMult
+int   dyn_nPiv  = useAutoAsset ? p_nPiv : nPiv
+float dyn_space = p_space
+
+// ============================================================================================
+// TYPES & PERSISTENT COLLECTIONS
+// ============================================================================================
+// Zone status constants
+var int Z_CREATED     = 0
+var int Z_QUALIFYING  = 1
+var int Z_ACTIVE      = 2
+var int Z_RETESTED    = 3
+var int Z_DEGRADED    = 4
+var int Z_FLIPPED     = 5
+var int Z_INVALIDATED = 6
+var int Z_EXPIRED     = 7
+
+// Setup type constants
+var int S_ZONE_REJECT   = 1
+var int S_FLIP_RETEST   = 2
+var int S_SWEEP_RECLAIM = 3
+var int S_DISP_RETEST   = 4
+var int S_BOS_RETEST    = 5
+
+// Exit reason constants
+var int X_STOP_LOSS    = 1
+var int X_BE_AFTER_TP1 = 2
+var int X_TP2          = 3
+var int X_TIME_STOP    = 4
+var int X_TRAIL_EXIT   = 5
+
+type zoneObj
+    int   id
+    float top
+    float btm
+    bool  isBull
+    int   birthBar          // bar_index at confirmation (NOT pivot bar) — BUG-05 fix
+    int   birthTime
+    int   touches       = 0
+    int   qualTouches   = 0   // touches with wick ≥ threshold AND close outside
+    int   lastTouchTime = 0
+    float maxReaction   = 0.0 // BUG-04 fix: only post-touch excursion
+    bool  reactionEarned = false
+    int   reactionSpeed = 0   // bars to reach 1 ATR after touch
+    float displacement  = 0.0 // creating bar's body / ATR
+    int   volQuality    = 0   // 0 = no data, 1 = present, 2 = surge
+    int   htfBonus      = 0
+    bool  mtfConf       = false
+    bool  pdwConf       = false  // near PDH/PDL/PWH/PWL
+    int   failedBreaks  = 0     // BUG-07 fix: sweep events tracked
+    bool  flipped       = false
+    int   flipBar       = 0
+    float flipQuality   = 0.0  // BUG-08 fix: displacement + vol of the break
+    int   tier          = 0    // 0=none, 1=Strong, 2=Elite
+    float qualityScore  = 0.0  // zone quality 0-35
+    int   lastSigBar    = 0
+    int   sigCount      = 0
+    int   status        = 0    // lifecycle state
+    int   freshness     = 100  // BUG-06 fix: decays continuously (100 at birth)
+    box   visBox
+    line  topLn
+    line  btmLn
+    label lvlLbl
+
+type mtfZone
+    box    b
+    string txt
+
+type sigCand
+    zoneObj z
+    float   score      = 0.0
+    int     setupType  = 0
+    bool    htfC       = false
+    bool    mtfC       = false
+    float   wickF      = 0.0
+    float   zoneScore  = 0.0
+    float   setupScore = 0.0
+    float   ctxScore   = 0.0
+
+type tradeVis
+    box    rb
+    box    gb
+    line   l1
+    label  lb
+    int    dir = 0
+    string tag = ""
+
+// BUG-09 fix: single zone array (both polarities in one store)
+var array<zoneObj>  zones     = array.new<zoneObj>()
+var array<mtfZone>  supply_HT = array.new<mtfZone>()
+var array<mtfZone>  demand_HT = array.new<mtfZone>()
+var array<tradeVis> tVis      = array.new<tradeVis>()
+var array<int>      nextZoneIdArr = array.new<int>(1, 0)
+var array<int>      retiredCountArr = array.new<int>(1, 0)   // BUG-21 fix: track retired boxes
+
+// ============================================================================================
+// SERIES, CANDLE METRICS, VOLUME
+// ============================================================================================
+confirmed      = barstate.isconfirmed
+curTFMS        = chartSec * 1000
+insideLookback = bar_index > last_bar_index - maxBarsBack
+atr            = ta.atr(atrLen)
+atrPct         = close > 0 ? atr / close * 100.0 : 0.0
+atrVol         = ta.atr(200)
+momentCTD      = time + zoneOffset * curTFMS
+extrap         = extendR ? extend.right : extend.none
+htfTol         = atr * htfTolATR
+tp1F           = tp1Frac / 100.0
+tp2F           = tp2Frac / 100.0
+tp3F           = math.max(0.0, 1.0 - tp1F - tp2F)
+fmtPx          = syminfo.mintick < 0.01 ? "#.########" : format.mintick
+baseTxt        = na(syminfo.basecurrency) ? "" : syminfo.basecurrency
+quoteTxt       = syminfo.currency
+var string tSize = textSize == "Auto" ? size.auto : textSize == "Tiny" ? size.tiny : textSize == "Small" ? size.small : textSize == "Normal" ? size.normal : textSize == "Large" ? size.large : size.huge
+
+candleBody  = math.abs(close - open)
+candleRange = high - low
+upperWick   = high - math.max(open, close)
+lowerWick   = math.min(open, close) - low
+isBearWick  = upperWick > candleBody
+isBullWick  = lowerWick > candleBody
+avgBody20   = ta.sma(candleBody, 20)
+
+// BUG-17 fix: explicit volume handling
+hasVolData     = ta.cum(nz(volume)) > 0
+avgVol         = ta.sma(nz(volume), volLen)
+volShort       = ta.ema(nz(volume), 5)
+volLong        = ta.ema(nz(volume), 10)
+volOsc         = volLong > 0 ? 100.0 * (volShort - volLong) / volLong : 0.0
+// BUG-17 fix: do NOT force surge when volume is absent
+hasVolumeSurge = hasVolData and volOsc > volThresh
+volState       = not hasVolData ? 0 : hasVolumeSurge ? 2 : 1   // 0=none, 1=present, 2=surge
+
+// Momentum candles among the last pivR bars
+int bullMomentum = 0
+int bearMomentum = 0
+for i = 0 to pivR - 1
+    if candleBody[i] >= avgBody20[i] * dyn_mom
+        if close[i] > open[i]
+            bullMomentum += 1
+        else
+            bearMomentum += 1
+
+// ============================================================================================
+// PIVOTS (BUG-19 fix: detect on true high/low always)
+// ============================================================================================
+pivot_high = ta.pivothigh(high, pivL, pivR)
+pivot_low  = ta.pivotlow(low, pivR, pivR)
+
+bandRaw = math.min(atr * zoneMult, close * (maxPct / 100.0)) / 2.0
+hiSince = ta.highest(high, pivR)
+loSince = ta.lowest(low, pivR)
+
+// Values at the pivot bar (pivR bars ago)
+bandR   = nz(bandRaw[pivR])
+volR    = nz(volume[pivR])
+avgVolR = nz(avgVol[pivR])
+impulseR = math.abs(close[pivR] - open[pivR])
+avgBodyR = nz(avgBody20[pivR])
+birthR  = bar_index   // BUG-05 fix: birth = confirmation time (now), not pivot bar
+timeR   = nz(time[pivR])
+
+// ============================================================================================
+// HTF CONTEXT (non-repainting: [1] offset + lookahead_on)
+// ============================================================================================
+f_htfLevels(int pLen) =>
+    float ph = ta.pivothigh(high, pLen, pLen)
+    float pl = ta.pivotlow(low, pLen, pLen)
+    float h1 = ta.valuewhen(not na(ph), ph, 0)
+    float h2 = ta.valuewhen(not na(ph), ph, 1)
+    float h3 = ta.valuewhen(not na(ph), ph, 2)
+    float l1 = ta.valuewhen(not na(pl), pl, 0)
+    float l2 = ta.valuewhen(not na(pl), pl, 1)
+    float l3 = ta.valuewhen(not na(pl), pl, 2)
+    [h1[1], h2[1], h3[1], l1[1], l2[1], l3[1]]
+
+[hH1, hH2, hH3, hL1, hL2, hL3] = request.security(syminfo.tickerid, htfRes, f_htfLevels(htfPivLen), lookahead = barmerge.lookahead_on)
+[tEma, tCls] = request.security(syminfo.tickerid, trendTF, [ta.ema(close, trendLen)[1], close[1]], lookahead = barmerge.lookahead_on)
+htfTrend = na(tEma) or na(tCls) ? 0 : tCls > tEma ? 1 : tCls < tEma ? -1 : 0
+
+// Previous day/week levels (non-repainting)
+[pdh, pdl] = request.security(syminfo.tickerid, "D", [high[1], low[1]], lookahead = barmerge.lookahead_on)
+[pwh, pwl] = request.security(syminfo.tickerid, "W", [high[1], low[1]], lookahead = barmerge.lookahead_on)
+
+// VWAP (UTC-day reset)
+vwapVal = ta.vwap(hlc3)
+
+f_nearLevel(float lvl, float zTop, float zBtm, float tol) =>
+    not na(lvl) and lvl >= zBtm - tol and lvl <= zTop + tol
+
+f_htfConf(bool isBullZone, float zTop, float zBtm, float tol) =>
+    bool hit = false
+    if useMTF
+        if isBullZone
+            hit := f_nearLevel(hL1, zTop, zBtm, tol) or f_nearLevel(hL2, zTop, zBtm, tol) or f_nearLevel(hL3, zTop, zBtm, tol)
+        else
+            hit := f_nearLevel(hH1, zTop, zBtm, tol) or f_nearLevel(hH2, zTop, zBtm, tol) or f_nearLevel(hH3, zTop, zBtm, tol)
+    hit
+
+f_pdwConf(float zTop, float zBtm, float tol) =>
+    f_nearLevel(pdh, zTop, zBtm, tol) or f_nearLevel(pdl, zTop, zBtm, tol) or f_nearLevel(pwh, zTop, zBtm, tol) or f_nearLevel(pwl, zTop, zBtm, tol)
+
+f_mtfOverlap(bool isBullZone, float zTop, float zBtm) =>
+    bool hit = false
+    array<mtfZone> arr = isBullZone ? demand_HT : supply_HT
+    for m in arr
+        float bt = box.get_top(m.b)
+        float bb = box.get_bottom(m.b)
+        if not na(bt) and not na(bb) and zBtm <= bt and zTop >= bb
+            hit := true
+            break
+    hit
+
+// ============================================================================================
+// STRUCTURE ENGINE  (BOS / swing state — non-repainting)
+// ============================================================================================
+var float lastSwingHigh  = na
+var float lastSwingLow   = na
+var int   lastSwingHighBar = 0
+var int   lastSwingLowBar  = 0
+var float prevSwingHigh  = na
+var float prevSwingLow   = na
+var int   structureState = 0   // -1=DOWN, 0=RANGE, 1=UP
+var int   lastBosBar     = 0
+var int   lastBosDir     = 0   // direction of last BOS
+
+structPivH = ta.pivothigh(high, structLen, structLen)
+structPivL = ta.pivotlow(low, structLen, structLen)
+
+if confirmed and not na(structPivH)
+    prevSwingHigh := lastSwingHigh
+    lastSwingHigh := structPivH
+    lastSwingHighBar := bar_index - structLen
+
+if confirmed and not na(structPivL)
+    prevSwingLow := lastSwingLow
+    lastSwingLow := structPivL
+    lastSwingLowBar := bar_index - structLen
+
+// BOS detection (on confirmed bars)
+var bool bosUp   = false
+var bool bosDn   = false
+bosUp   := false
+bosDn   := false
+
+if confirmed and not na(lastSwingHigh) and not na(atr)
+    if close > lastSwingHigh + bosATRMult * atr and structureState != 1
+        bosUp := true
+        structureState := 1
+        lastBosBar := bar_index
+        lastBosDir := 1
+        if showStructure
+            label.new(bar_index, low, "BOS↑", style = label.style_label_up, color = color.new(#00c853, 20), textcolor = color.white, size = size.tiny)
+
+if confirmed and not na(lastSwingLow) and not na(atr)
+    if close < lastSwingLow - bosATRMult * atr and structureState != -1
+        bosDn := true
+        structureState := -1
+        lastBosBar := bar_index
+        lastBosDir := -1
+        if showStructure
+            label.new(bar_index, high, "BOS↓", style = label.style_label_down, color = color.new(#ff1744, 20), textcolor = color.white, size = size.tiny)
+
+// HH/HL/LH/LL classification
+var string swingLabel = ""
+if confirmed and not na(structPivH) and not na(prevSwingHigh)
+    swingLabel := structPivH > prevSwingHigh ? "HH" : "LH"
+if confirmed and not na(structPivL) and not na(prevSwingLow)
+    swingLabel := structPivL > prevSwingLow ? "HL" : "LL"
+
+// ============================================================================================
+// LIQUIDITY ENGINE  (sweep detection, equal highs/lows)
+// ============================================================================================
+var float lastEqHigh    = na
+var float lastEqLow     = na
+var int   lastEqHighBar = 0
+var int   lastEqLowBar  = 0
+var bool  sweepUpEvt    = false
+var bool  sweepDnEvt    = false
+var float sweepUpLow    = na    // the extreme of the sweep (for reclaim)
+var float sweepDnHigh   = na
+var int   sweepUpBar    = 0
+var int   sweepDnBar    = 0
+var bool  reclaimUp     = false
+var bool  reclaimDn     = false
+
+// Equal highs/lows: two recent swing highs/lows within tolerance
+if confirmed and not na(structPivH) and not na(prevSwingHigh) and not na(atr)
+    if math.abs(structPivH - prevSwingHigh) <= eqTol * atr
+        lastEqHigh := math.max(structPivH, prevSwingHigh)
+        lastEqHighBar := bar_index
+
+if confirmed and not na(structPivL) and not na(prevSwingLow) and not na(atr)
+    if math.abs(structPivL - prevSwingLow) <= eqTol * atr
+        lastEqLow := math.min(structPivL, prevSwingLow)
+        lastEqLowBar := bar_index
+
+// Sweep detection: price breaks beyond a level then closes back inside
+sweepUpEvt := false
+sweepDnEvt := false
+reclaimUp  := false
+reclaimDn  := false
+
+if confirmed and not na(atr)
+    // Check sweep above resistance (sweep into supply then reclaim)
+    float resLevel = na
+    if not na(lastEqHigh) and (bar_index - lastEqHighBar) > 3
+        resLevel := lastEqHigh
+    else if not na(lastSwingHigh) and (bar_index - lastSwingHighBar) > 3
+        resLevel := lastSwingHigh
+
+    if not na(resLevel)
+        if high > resLevel + sweepMinATR * atr and close < resLevel
+            sweepUpEvt := true
+            sweepDnHigh := high
+            sweepDnBar := bar_index
+            if showSweeps
+                label.new(bar_index, high, "SW↓", style = label.style_label_down, color = color.new(#ff9800, 30), textcolor = color.white, size = size.tiny)
+
+    // Check sweep below support (sweep into demand then reclaim)
+    float supLevel = na
+    if not na(lastEqLow) and (bar_index - lastEqLowBar) > 3
+        supLevel := lastEqLow
+    else if not na(lastSwingLow) and (bar_index - lastSwingLowBar) > 3
+        supLevel := lastSwingLow
+
+    if not na(supLevel)
+        if low < supLevel - sweepMinATR * atr and close > supLevel
+            sweepDnEvt := true
+            sweepUpLow := low
+            sweepUpBar := bar_index
+            if showSweeps
+                label.new(bar_index, low, "SW↑", style = label.style_label_up, color = color.new(#ff9800, 30), textcolor = color.white, size = size.tiny)
+
+    // Reclaim check for pending sweeps (within reclaimBars)
+    if not na(sweepUpLow) and (bar_index - sweepUpBar) <= reclaimBars and (bar_index - sweepUpBar) >= 1
+        if close > supLevel
+            reclaimUp := true
+    if not na(sweepDnHigh) and (bar_index - sweepDnBar) <= reclaimBars and (bar_index - sweepDnBar) >= 1
+        if close < resLevel
+            reclaimDn := true
+
+// --- CHoCH Logic ---
+var bool chochBull = false
+var bool chochBear = false
+if confirmed
+    if sweepDnEvt and close > lastSwingHigh
+        chochBull := true
+    if sweepUpEvt and close < lastSwingLow
+        chochBear := true
+    // Reset choch on new structure
+    if not na(structPivH)
+        chochBull := false
+    if not na(structPivL)
+        chochBear := false
+
+// ============================================================================================
+// REGIME ENGINE  (trend × volatility)
+// ============================================================================================
+// ATR percentile rank
+atrPctNorm = close > 0 ? atr / close * 100.0 : 0.0
+atrPercentile = ta.percentrank(atrPctNorm, regimeATRPeriod)
+
+// Volatility regime: 0=normal, 1=high, -1=low
+volRegime = atrPercentile >= regimeVolHi ? 1 : atrPercentile <= regimeVolLo ? -1 : 0
+
+// Trend regime uses HTF trend EMA (already computed)
+// -1=DOWN, 0=FLAT/RANGE, 1=UP
+trendRegime = na(tEma) or na(tCls) or na(atr) ? 0 : math.abs(tCls - tEma) < regimeTrendFlat * atr ? 0 : tCls > tEma ? 1 : -1
+
+// Combined regime string for display
+f_regimeStr() =>
+    string t = trendRegime == 1 ? "TREND↑" : trendRegime == -1 ? "TREND↓" : "RANGE"
+    string v = volRegime == 1 ? " +HiVol" : volRegime == -1 ? " +LoVol" : ""
+    t + v
+
+// ============================================================================================
+// ZONE HELPERS
+// ============================================================================================
+f_zoneColor(bool isElite, bool isBull) =>
+    isElite ? (isBull ? color.new(#00c853, 78) : color.new(#ff1744, 78)) : (isBull ? color.new(#69f0ae, 88) : color.new(#ff8a80, 88))
+
+// BUG-06 fix: quality score incorporates freshness decay
+f_calcQualityScore(zoneObj z, float _atr) =>
+    float qs = 0.0
+    // Base: displacement quality (0-8)
+    qs += math.min(z.displacement / 1.5, 1.0) * 8.0
+    // Touch quality (0-6): first 2 touches add value, then degrades — BUG-04/MATH-01 fix
+    float touchVal = z.qualTouches >= 1 ? 4.0 : 0.0
+    touchVal += z.qualTouches >= 2 ? 2.0 : 0.0
+    touchVal -= math.max(0, z.qualTouches - 3) * 1.0   // degradation
+    qs += math.max(0.0, touchVal)
+    // Reaction quality (0-6): only post-touch excursion — BUG-04 fix
+    if z.reactionEarned
+        qs += 4.0
+        if z.reactionSpeed > 0 and z.reactionSpeed < 10
+            qs += 2.0
+    // HTF confluence (0-5)
+    if z.htfBonus > 0
+        qs += 5.0
+    // MTF confluence (0-3)
+    if z.mtfConf
+        qs += 3.0
+    // PDW confluence (0-2)
+    if z.pdwConf
+        qs += 2.0
+    // Volume quality (0-3)
+    qs += z.volQuality == 2 ? 3.0 : z.volQuality == 1 ? 1.0 : 0.0
+    // Freshness decay — BUG-06 fix: actually affects scoring
+    float freshnessF = z.freshness / 100.0
+    qs *= freshnessF
+    // Zone width penalty: very wide zones are less precise
+    float zWidth = (z.top - z.btm)
+    if _atr > 0 and zWidth / _atr > 1.5
+        qs *= 0.85
+    // Flip quality bonus (BUG-08 fix: only earned quality)
+    if z.flipped and z.flipQuality > 1.0
+        qs += math.min(z.flipQuality, 3.0)
+    math.min(35.0, math.max(0.0, qs))
+
+f_tier(float qs) =>
+    qs >= 22.0 ? 2 : qs >= 12.0 ? 1 : 0
+
+method deleteVis(zoneObj z) =>
+    if not na(z.visBox)
+        box.delete(z.visBox)
+        z.visBox := na
+    if not na(z.topLn)
+        line.delete(z.topLn)
+        z.topLn := na
+    if not na(z.btmLn)
+        line.delete(z.btmLn)
+        z.btmLn := na
+    if not na(z.lvlLbl)
+        label.delete(z.lvlLbl)
+        z.lvlLbl := na
+    true
+
+method retireVis(zoneObj z) =>
+    if keepHistory and retiredCountArr.get(0) < maxRetired and (not na(z.visBox) or not na(z.topLn))
+        if not na(z.visBox)
+            box.set_right(z.visBox, bar_index)
+            box.set_extend(z.visBox, extend.none)
+        if not na(z.topLn)
+            line.set_x2(z.topLn, bar_index)
+            line.set_extend(z.topLn, extend.none)
+        if not na(z.btmLn)
+            line.set_x2(z.btmLn, bar_index)
+            line.set_extend(z.btmLn, extend.none)
+        if not na(z.lvlLbl)
+            label.delete(z.lvlLbl)
+        z.visBox := na
+        z.topLn  := na
+        z.btmLn  := na
+        z.lvlLbl := na
+        retiredCountArr.set(0, retiredCountArr.get(0) + 1)
+    else
+        z.deleteVis()
+    true
+
+clampZone(float top, float btm, float _atr) =>
+    float zTop = top
+    float zBtm = btm
+    float sz = zTop - zBtm
+    float maxSz = _atr * maxZoneSizeATR
+    if sz > maxSz
+        float diff = sz - maxSz
+        zTop -= diff / 2
+        zBtm += diff / 2
+    [zTop, zBtm]
+
+// BUG-11 fix: rank by full quality score
+method dropWeakest(array<zoneObj> arr) =>
+    if arr.size() > 0
+        int wi = 0
+        float ws = 999999.0
+        for i = 0 to arr.size() - 1
+            zoneObj zt = arr.get(i)
+            if zt.qualityScore < ws
+                ws := zt.qualityScore
+                wi := i
+        zoneObj zd = arr.get(wi)
+        zd.deleteVis()
+        arr.remove(wi)
+    true
+
+// BUG-10 fix: compare all zone pairs within price proximity, not index proximity
+method combineOverlapping(array<zoneObj> arr, float _atr) =>
+    if mergeOverlap and arr.size() > 1
+        bool merged = true
+        int safetyCounter = 0
+        while merged and arr.size() > 1 and safetyCounter < 20
+            merged := false
+            safetyCounter += 1
+            for i = arr.size() - 1 to 1
+                if arr.size() < 2
+                    break
+                zoneObj z1 = arr.get(i)
+                for j = i - 1 to 0
+                    zoneObj z2 = arr.get(j)
+                    if z1.isBull == z2.isBull and math.min(z1.top, z2.top) > math.max(z1.btm, z2.btm)
+                        z2.top := math.max(z1.top, z2.top)
+                        z2.btm := math.min(z1.btm, z2.btm)
+                        [newT, newB] = clampZone(z2.top, z2.btm, _atr)
+                        z2.top := newT
+                        z2.btm := newB
+                        z2.volQuality := math.max(z2.volQuality, z1.volQuality)
+                        z2.qualTouches := math.max(z2.qualTouches, z1.qualTouches)
+                        z2.htfBonus := math.max(z2.htfBonus, z1.htfBonus)
+                        z2.flipped := z2.flipped or z1.flipped
+                        z1.deleteVis()
+                        arr.remove(i)
+                        merged := true
+                        break
+                if merged
+                    break
+    true
+
+// ============================================================================================
+// ZONE CREATION  (BUG-05, BUG-08, BUG-09, BUG-12, MATH-03/04 fixes applied)
+// ============================================================================================
+f_addZone(bool doAdd, bool isBullZone, float pivotPx, bool fvgConf, float depStr) =>
+    if doAdd
+        float zT = pivotPx + bandR
+        float zB = pivotPx - bandR
+        [cT, cB] = clampZone(zT, zB, atr)
+        zT := cT
+        zB := cB
+
+        // BUG-09 fix: check for duplicate across the single array
+        bool merged = false
+        float tolM = atr * mergeAtrFrac
+        for z in zones
+            if z.isBull == isBullZone and pivotPx >= z.btm - tolM and pivotPx <= z.top + tolM
+                z.top := math.max(z.top, zT)
+                z.btm := math.min(z.btm, zB)
+                [mT, mB] = clampZone(z.top, z.btm, atr)
+                z.top := mT
+                z.btm := mB
+                z.volQuality := math.max(z.volQuality, volState)
+                merged := true
+                break
+
+        if not merged
+            float minSp = atr * dyn_space
+            bool tooClose = false
+            for ez in zones
+                if math.abs(ez.top - zT) < minSp and ez.isBull == isBullZone
+                    tooClose := true
+                    break
+
+            if not tooClose
+                // MATH-03/04 fix: displacement-based filter replaces near-vacuous momentum count
+                float pivotBody = impulseR
+                float pivotATR = nz(atr[pivR])
+                bool hasDisplacement = pivotATR > 0 and pivotBody / pivotATR >= displacementMult * dyn_mom
+                bool hasVol = hasVolData and volR > avgVolR * 1.5
+                bool strongMove = isBullZone ? bullMomentum >= momentumCount : bearMomentum >= momentumCount
+
+                if strongMove and (hasDisplacement or hasVol)
+                    // Count bull/bear zones separately for capacity
+                    int sameCount = 0
+                    for ez in zones
+                        if ez.isBull == isBullZone
+                            sameCount += 1
+                    if sameCount >= dyn_nPiv
+                        // Drop weakest same-polarity zone
+                        int wi = -1
+                        float ws = 999999.0
+                        for i = 0 to zones.size() - 1
+                            zoneObj zt = zones.get(i)
+                            if zt.isBull == isBullZone and zt.qualityScore < ws
+                                ws := zt.qualityScore
+                                wi := i
+                        if wi >= 0
+                            zoneObj zd = zones.get(wi)
+                            zd.deleteVis()
+                            zones.remove(wi)
+
+                    int hB = f_htfConf(isBullZone, zT, zB, htfTol) ? 2 : 0
+                    bool pdwC = f_pdwConf(zT, zB, htfTol)
+                    int vQ = volState
+                    float disp = pivotATR > 0 ? pivotBody / pivotATR : 0.0
+
+                    nextZoneIdArr.set(0, nextZoneIdArr.get(0) + 1)
+                    zoneObj newZ = zoneObj.new(
+                         id = nextZoneIdArr.get(0),
+                         top = zT, btm = zB, isBull = isBullZone,
+                         birthBar = bar_index,   // BUG-05 fix: confirmation time
+                         birthTime = time,
+                         touches = 0,            // BUG-08/12 fix: starts at 0, not 1
+                         qualTouches = 0,
+                         lastTouchTime = 0,
+                         maxReaction = 0.0,      // BUG-04 fix: no pre-loaded reaction
+                         reactionEarned = false,
+                         reactionSpeed = 0,
+                         displacement = disp,
+                         volQuality = vQ,
+                         htfBonus = hB,
+                         mtfConf = false,
+                         pdwConf = pdwC,
+                         failedBreaks = 0,
+                         flipped = false,
+                         flipBar = 0,
+                         flipQuality = 0.0,
+                         tier = 0,
+                         qualityScore = 0.0,
+                         lastSigBar = 0,
+                         sigCount = 0,
+                         status = Z_CREATED,
+                         freshness = 100)
+                    zones.push(newZ)
+        true
+
+// ============================================================================================
+// ZONE LIFECYCLE ENGINE  (confirmed bars only)
+// ============================================================================================
+processZones() =>
+    if zones.size() > 0 and insideLookback
+        float invH = invalidation == "Close" ? close : high
+        float invL = invalidation == "Close" ? close : low
+
+        for i = zones.size() - 1 to 0
+            if i >= zones.size()
+                continue
+            zoneObj z = zones.get(i)
+            int age = bar_index - z.birthBar
+
+            // --- Lifecycle: CREATED → QUALIFYING ---
+            if z.status == Z_CREATED
+                z.status := Z_QUALIFYING
+
+            // --- Lifecycle: QUALIFYING → ACTIVE ---
+            if z.status == Z_QUALIFYING and age >= minZoneDuration
+                z.status := Z_ACTIVE
+
+            // --- Freshness decay — BUG-06 fix: continuous, affects scoring ---
+            z.freshness := math.max(0, 100 - math.round(age * 100.0 / (dyn_decay * 2.0)))
+
+            // --- Touch detection (BUG-12 fix: record state BEFORE scoring) ---
+            bool isTouch = false
+            if z.status >= Z_ACTIVE
+                isTouch := z.isBull ? (low <= z.top and close > z.top and isBullWick) : (high >= z.btm and close < z.btm and isBearWick)
+                if isTouch and (time - z.lastTouchTime > curTFMS * 5)
+                    z.touches += 1
+                    float wickF = candleRange > 0 ? (z.isBull ? lowerWick : upperWick) / candleRange : 0.0
+                    if wickF >= sigMinWick
+                        z.qualTouches += 1
+                    z.lastTouchTime := time
+                    z.maxReaction := 0.0           // BUG-04 fix: reset reaction on each touch
+                    z.reactionEarned := false
+                    z.reactionSpeed := 0
+                    if z.status == Z_ACTIVE
+                        z.status := Z_RETESTED
+
+            // --- Reaction tracking (BUG-04 fix: post-touch only) ---
+            if z.touches > 0 and z.status >= Z_ACTIVE
+                if z.isBull
+                    if high > z.top + z.maxReaction
+                        z.maxReaction := high - z.top
+                else
+                    if low < z.btm - z.maxReaction
+                        z.maxReaction := z.btm - low
+                if not z.reactionEarned and not na(atr) and atr > 0 and z.maxReaction > atr * 1.2
+                    z.reactionEarned := true
+                    z.reactionSpeed := bar_index - z.lastTouchTime
+
+            // --- HTF / MTF / PDW confluence refresh ---
+            if z.htfBonus == 0 and f_htfConf(z.isBull, z.top, z.btm, htfTol)
+                z.htfBonus := 2
+            z.mtfConf := f_mtfOverlap(z.isBull, z.top, z.btm)
+            z.pdwConf := f_pdwConf(z.top, z.btm, htfTol)
+
+            // --- Quality score & tier (uses state BEFORE this bar's signal scan) ---
+            z.qualityScore := f_calcQualityScore(z, atr)
+            int prevTier = z.tier
+            z.tier := f_tier(z.qualityScore)
+
+            // --- Degradation ---
+            if z.status >= Z_ACTIVE and z.status != Z_FLIPPED and z.tier == 0
+                z.status := Z_DEGRADED
+
+            // --- Un-degrade if score recovers ---
+            if z.status == Z_DEGRADED and z.tier >= 1
+                z.status := Z_ACTIVE
+
+            // --- Expiry ---
+            if age > dyn_decay * 2
+                if keepHistory and prevTier == 2 and retiredCountArr.get(0) < maxRetired
+                    z.retireVis()
+                else
+                    z.deleteVis()
+                z.status := Z_EXPIRED
+                zones.remove(i)
+                continue
+
+            // --- Break / Polarity flip (BUG-07, BUG-08 fixes) ---
+            bool brokenUp = invH > z.top and not z.isBull
+            bool brokenDn = invL < z.btm and z.isBull
+            if brokenUp or brokenDn
+                // BUG-07 fix: wick-through with close back inside = failed break (sweep), not deletion
+                bool closesBeyond = brokenUp ? close > z.top : close < z.btm
+                bool counterWick = brokenUp ? isBearWick : isBullWick
+
+                if not closesBeyond
+                    // Failed break / sweep: zone survives, records the event
+                    z.failedBreaks += 1
+                else if closesBeyond and not counterWick and (hasVolumeSurge or z.htfBonus > 0)
+                    // Valid break
+                    if flipZones and z.status >= Z_ACTIVE
+                        // Flip the zone
+                        if not na(z.visBox)
+                            box.set_right(z.visBox, bar_index)
+                            box.set_extend(z.visBox, extend.none)
+                        if not na(z.topLn)
+                            line.set_x2(z.topLn, bar_index)
+                            line.set_extend(z.topLn, extend.none)
+                        if not na(z.lvlLbl)
+                            label.delete(z.lvlLbl)
+                        z.visBox := na
+                        z.topLn  := na
+                        z.btmLn  := na
+                        z.lvlLbl := na
+
+                        z.isBull := brokenUp
+                        z.birthBar := bar_index
+                        z.flipped := true
+                        z.flipBar := bar_index
+                        z.status := Z_FLIPPED
+                        // BUG-08 fix: only earned evidence
+                        float breakDisp = candleBody / (atr > 0 ? atr : 1.0)
+                        z.flipQuality := breakDisp + (hasVolumeSurge ? 1.0 : 0.0)
+                        z.touches := 0          // BUG-08 fix: start fresh, not fabricated
+                        z.qualTouches := 0
+                        z.reactionEarned := false
+                        z.maxReaction := 0.0
+                        z.volQuality := volState
+                        z.sigCount := 0
+                        z.lastTouchTime := time
+                        z.freshness := 100
+                        z.qualityScore := f_calcQualityScore(z, atr)
+                        z.tier := f_tier(z.qualityScore)
+                    else
+                        // No flip: invalidate
+                        if keepHistory and prevTier == 2 and retiredCountArr.get(0) < maxRetired
+                            z.retireVis()
+                        else
+                            z.deleteVis()
+                        z.status := Z_INVALIDATED
+                        zones.remove(i)
+                        continue
+                else
+                    // Break without sufficient confirmation: delete
+                    z.deleteVis()
+                    z.status := Z_INVALIDATED
+                    zones.remove(i)
+                    continue
+
+            // --- Drawing ---
+            if z.tier >= 1 and z.status >= Z_QUALIFYING and z.status <= Z_FLIPPED
+                color c = f_zoneColor(z.tier == 2, z.isBull)
+                color bC = z.isBull ? bullBorder : bearBorder
+                string statusCode = z.status == Z_FLIPPED ? "F" : z.status == Z_RETESTED ? "R" : z.tier == 2 ? "E" : "S"
+                string zTxt = statusCode + " x" + str.tostring(z.touches) + (z.failedBreaks > 0 ? " fb" + str.tostring(z.failedBreaks) : "")
+
+                if drawMode == "Boxes"
+                    if na(z.visBox)
+                        z.visBox := box.new(z.birthBar, z.top, bar_index, z.btm, border_color = bC, bgcolor = c, extend = extrap, text = zTxt, text_size = size.tiny, text_color = color.new(color.white, 35), text_halign = text.align_right)
+                    else
+                        box.set_top(z.visBox, z.top)
+                        box.set_bottom(z.visBox, z.btm)
+                        box.set_right(z.visBox, bar_index)
+                        box.set_bgcolor(z.visBox, c)
+                        box.set_border_color(z.visBox, bC)
+                        box.set_extend(z.visBox, extrap)
+                        box.set_text(z.visBox, zTxt)
+                    box.set_border_style(z.visBox, z.flipped ? line.style_dashed : line.style_solid)
+                else
+                    float mid = (z.top + z.btm) / 2
+                    if na(z.topLn)
+                        z.topLn := line.new(z.birthBar, mid, bar_index, mid, color = bC, width = 2, extend = extrap)
+                    else
+                        line.set_xy1(z.topLn, z.birthBar, mid)
+                        line.set_xy2(z.topLn, bar_index, mid)
+                        line.set_color(z.topLn, bC)
+                        line.set_extend(z.topLn, extrap)
+                    line.set_style(z.topLn, z.flipped ? line.style_dashed : line.style_solid)
+
+                if lLab
+                    string priceTxt = str.tostring(z.top, format.mintick) + " - " + str.tostring(z.btm, format.mintick)
+                    float midY = (z.top + z.btm) / 2
+                    if na(z.lvlLbl)
+                        z.lvlLbl := label.new(bar_index + 3, midY, priceTxt, color = color.new(bC, 20), textcolor = textColor, style = label.style_label_left, size = size.small)
+                    else
+                        label.set_xy(z.lvlLbl, bar_index + 3, midY)
+                        label.set_text(z.lvlLbl, priceTxt)
+                        label.set_color(z.lvlLbl, color.new(bC, 20))
+                else if not na(z.lvlLbl)
+                    label.delete(z.lvlLbl)
+                    z.lvlLbl := na
+    true
+
+// ============================================================================================
+// MTF SUPPLY & DEMAND ENGINE  (same as v2, no bugs found)
+// ============================================================================================
+createSupplyDemandZones(string tf) =>
+    [oHT, hHT, lHT, cHT] = request.security(syminfo.tickerid, tf, [open[1], high[1], low[1], close[1]], lookahead = barmerge.lookahead_on)
+    int leftT = time(tf)[1]
+    string tfForm = tf == "30" ? "30m" : tf == "60" ? "1h" : tf == "240" ? "4h" : tf == "D" ? "D" : tf == "W" ? "W" : tf + "m"
+    bool redC = cHT < oHT
+    bool greenC = cHT > oHT
+    bool flatC = cHT == oHT
+    float chg = math.abs(cHT - oHT)
+    float chgP = chg[1]
+    bool bigEnough = chgP > 0 ? chg / chgP >= candleDifferenceScale : chg > 0
+    bool bearEngulf = redC and (greenC[1] or flatC[1]) and bigEnough and cHT[1] >= cHT and oHT[1] <= oHT
+    bool bullEngulf = greenC and (redC[1] or flatC[1]) and bigEnough and cHT[1] <= cHT and oHT[1] >= oHT
+    if confirmed and insideLookback
+        if supplyEnable and bearEngulf
+            float topB = math.max(hHT, hHT[1])
+            box sb = box.new(left = leftT, top = topB, right = momentCTD, bottom = oHT[1], bgcolor = supplyColor, border_color = supplyBorderCol, xloc = xloc.bar_time)
+            if textEnable
+                box.set_text(sb, tfForm)
+                box.set_text_size(sb, tSize)
+                box.set_text_color(sb, textColor)
+                box.set_text_halign(sb, text.align_right)
+                box.set_text_valign(sb, text.align_bottom)
+            supply_HT.push(mtfZone.new(sb, tfForm))
+            if supply_HT.size() > maxMtfBoxes
+                mtfZone oldS = supply_HT.shift()
+                box.delete(oldS.b)
+        if demandEnable and bullEngulf
+            float botB = math.min(lHT, lHT[1])
+            box db = box.new(left = leftT, top = oHT[1], right = momentCTD, bottom = botB, bgcolor = demandColor, border_color = demandBorderCol, xloc = xloc.bar_time)
+            if textEnable
+                box.set_text(db, tfForm)
+                box.set_text_size(db, tSize)
+                box.set_text_color(db, textColor)
+                box.set_text_halign(db, text.align_right)
+                box.set_text_valign(db, text.align_top)
+            demand_HT.push(mtfZone.new(db, tfForm))
+            if demand_HT.size() > maxMtfBoxes
+                mtfZone oldD = demand_HT.shift()
+                box.delete(oldD.b)
+    true
+
+mergeMTFBoxes(array<mtfZone> zoneArray) =>
+    if mergeOverlap and zoneArray.size() > 1
+        bool merged = true
+        int safety = 0
+        while merged and zoneArray.size() > 1 and safety < 20
+            merged := false
+            safety += 1
+            for i = zoneArray.size() - 1 to 1
+                if zoneArray.size() < 2
+                    break
+                mtfZone z1 = zoneArray.get(i)
+                for j = i - 1 to 0
+                    mtfZone z2 = zoneArray.get(j)
+                    float t1 = box.get_top(z1.b)
+                    float b1 = box.get_bottom(z1.b)
+                    float t2 = box.get_top(z2.b)
+                    float b2 = box.get_bottom(z2.b)
+                    if math.min(t1, t2) >= math.max(b1, b2)
+                        box.set_top(z2.b, math.max(t1, t2))
+                        box.set_bottom(z2.b, math.min(b1, b2))
+                        if not str.contains(z2.txt, z1.txt)
+                            z2.txt := z2.txt + "+" + z1.txt
+                            if textEnable
+                                box.set_text(z2.b, z2.txt)
+                        box.delete(z1.b)
+                        zoneArray.remove(i)
+                        merged := true
+                        break
+                if merged
+                    break
+    true
+
+updateMTFBoxes(array<mtfZone> arr, bool isSupply) =>
+    float brkH = invalidation == "Close" ? close : high
+    float brkL = invalidation == "Close" ? close : low
+    int idx = arr.size() - 1
+    while idx >= 0
+        mtfZone mz = arr.get(idx)
+        float lvl = isSupply ? box.get_top(mz.b) : box.get_bottom(mz.b)
+        bool broken = isSupply ? brkH > lvl : brkL < lvl
+        if broken
+            box.delete(mz.b)
+            arr.remove(idx)
+        else
+            box.set_right(mz.b, momentCTD)
+        idx -= 1
+    true
+
+// ============================================================================================
+// ZONE ENGINE EXECUTION
+// ============================================================================================
+if confirmed and insideLookback
+
+    bool fvgConf = false
+    float depStr = 0.0
+    for j = 0 to math.min(pivR, 10)
+        if (dhighs and not na(pivot_high)) and fvgBear[j]
+            fvgConf := true
+        if (dlows and not na(pivot_low)) and fvgBull[j]
+            fvgConf := true
+        float bdy = math.abs(close[j] - open[j])
+        float a_j = atr[j]
+        if a_j > 0 and (bdy / a_j) > depStr
+            depStr := bdy / a_j
+            
+    f_addZone(dhighs and not na(pivot_high), false, pivot_high, fvgConf, depStr)
+    f_addZone(dlows and not na(pivot_low), true, pivot_low, fvgConf, depStr)
+
+    zones.combineOverlapping(atr)
+
+if confirmed
+    processZones()
+
+if display30m and chartSec <= 1800
+    createSupplyDemandZones("30")
+if display1h and chartSec <= 3600
+    createSupplyDemandZones("60")
+if display4h and chartSec <= 14400
+    createSupplyDemandZones("240")
+if displayD and chartSec <= 86400
+    createSupplyDemandZones("D")
+if displayW and chartSec <= 604800
+    createSupplyDemandZones("W")
+
+if confirmed
+    mergeMTFBoxes(supply_HT)
+    mergeMTFBoxes(demand_HT)
+    updateMTFBoxes(supply_HT, true)
+    updateMTFBoxes(demand_HT, false)
+
+// ============================================================================================
+// SIGNAL ENGINE — SETUP SCANNER + SCORING  (redesigned, BUG-12 fix)
+// ============================================================================================
+f_calcSetupScore(int setupType, float wickF, bool isFlip, float disp) =>
+    float ss = 0.0
+    // Base by setup type (0-15)
+    if setupType == S_ZONE_REJECT
+        ss += 10.0
+    else if setupType == S_FLIP_RETEST
+        ss += 13.0
+    else if setupType == S_SWEEP_RECLAIM
+        ss += 15.0    // highest potential (most selective trigger)
+    else if setupType == S_DISP_RETEST
+        ss += 12.0
+    else if setupType == S_BOS_RETEST
+        ss += 11.0
+    // Wick quality (0-8)
+    ss += math.min(wickF / 0.5, 1.0) * 8.0
+    // Displacement (0-7)
+    ss += math.min(disp / 2.0, 1.0) * 7.0
+    // Flip bonus (0-5) — only if earned quality exists
+    if isFlip
+        ss += 5.0
+    math.min(35.0, ss)
+
+f_calcContextScore(int al, int _volRegime, int _structState, bool hasSweepCtx, bool hasVolSurge, bool _hasVolData) =>
+    float cs = 0.0
+    // Trend alignment (0-10)
+    if al == 1
+        cs += 10.0
+    else if al == 0
+        cs += 5.0
+    // else al == -1: no bonus (counter-trend)
+    // Volatility regime (0-5)
+    if _volRegime == 0   // normal vol
+        cs += 5.0
+    else if _volRegime == 1   // high vol
+        cs += 2.0
+    else
+        cs += 3.0   // low vol: ok for zones
+    // Structure alignment (0-5)
+    if _structState != 0
+        cs += 5.0
+    // Volume confirmation (0-5) — BUG-17 fix: only when data exists
+    if _hasVolData
+        cs += hasVolSurge ? 5.0 : 2.0
+    // Sweep context (0-5)
+    if hasSweepCtx
+        cs += 5.0
+    math.min(30.0, cs)
+
+f_scanZones(bool wantLong, sigCand best) =>
+    sigCand res = best
+    int minTierNum = sigMinTier == "Elite" ? 2 : 1
+    for z in zones
+        if z.isBull != wantLong
+            continue
+        if z.tier < minTierNum
+            continue
+        if z.sigCount >= maxSigPerZone
+            continue
+        if z.status < Z_ACTIVE or z.status > Z_FLIPPED
+            continue
+
+        int age = bar_index - z.birthBar
+        bool ageOK = age >= minZoneDuration
+
+        // Determine setup type
+        int setupType = 0
+        bool rej = wantLong ? (low <= z.top and close > z.top) : (high >= z.btm and close < z.btm)
+
+        if rej and ageOK
+            float wf = candleRange > 0 ? (wantLong ? lowerWick : upperWick) / candleRange : 0.0
+            bool dirOK = not sigReqDir or (wantLong ? (close > open) : (close < open))
+            int al = wantLong ? trendRegime : -trendRegime
+            bool trendOK = trendMode != "Hard" or al >= 0
+            bool volOK = not sigReqVol or hasVolumeSurge
+
+            if wf >= sigMinWick and dirOK and trendOK and volOK
+                // Classify setup type
+                if z.flipped and z.status == Z_FLIPPED and enableFlipRetest
+                    setupType := S_FLIP_RETEST
+                else if enableZoneReject
+                    setupType := S_ZONE_REJECT
+
+                // Check for sweep context
+                bool hasSweepCtx = false
+                if enableSweepReclaim
+                    if wantLong and sweepDnEvt
+                        hasSweepCtx := true
+                        setupType := S_SWEEP_RECLAIM
+                    else if not wantLong and sweepUpEvt
+                        hasSweepCtx := true
+                        setupType := S_SWEEP_RECLAIM
+
+                // BOS retest check
+                if enableBosRetest and setupType == S_ZONE_REJECT
+                    if wantLong and lastBosDir == 1 and (bar_index - lastBosBar) < 30
+                        setupType := S_BOS_RETEST
+                    else if not wantLong and lastBosDir == -1 and (bar_index - lastBosBar) < 30
+                        setupType := S_BOS_RETEST
+
+                if setupType > 0
+                    // Calculate composite score
+                    float zs = z.qualityScore   // Zone quality (0-35)
+                    float ss = f_calcSetupScore(setupType, wf, z.flipped, z.displacement)  // Setup quality (0-35)
+                    float cs = f_calcContextScore(al, volRegime, structureState, hasSweepCtx, hasVolumeSurge, hasVolData)  // Context (0-30)
+                    float totalScore = zs + ss + cs
+                    totalScore := math.max(0.0, math.min(100.0, totalScore))
+
+                    if totalScore >= sigMinScore and (na(res.z) or totalScore > res.score)
+                        res := sigCand.new(z, totalScore, setupType, z.htfBonus > 0, z.mtfConf, wf, zs, ss, cs)
+    res
+
+f_oppIn(bool forLong, float px) =>
+    float lvl = na
+    for z in zones
+        if z.tier >= 1
+            if forLong and not z.isBull and z.btm > px
+                lvl := na(lvl) ? z.btm : math.min(lvl, z.btm)
+            else if not forLong and z.isBull and z.top < px
+                lvl := na(lvl) ? z.top : math.max(lvl, z.top)
+    lvl
+
+f_setupName(int st) =>
+    st == S_ZONE_REJECT ? "ZONE_REJECT" : st == S_FLIP_RETEST ? "FLIP_RETEST" : st == S_SWEEP_RECLAIM ? "SWEEP_RECLAIM" : st == S_DISP_RETEST ? "DISP_RETEST" : st == S_BOS_RETEST ? "BOS_RETEST" : "UNKNOWN"
+
+// ============================================================================================
+// ALERT JSON BUILDERS  (schema with features, BUG-22 fix)
+// ============================================================================================
+f_jsonEntry(string idv, string evtId, string sideTxt, string typeTxt, float scoreV, string gradeV, float en, float sl, float t1, float t2, float rpx, string why, sigCand pc) =>
+    string s = '{"v":3,"passphrase":"' + alertPass + '","event":"ENTRY","id":"' + idv + '","event_id":"' + evtId + '"'
+    s += ',"strategy":"' + strategyName + '","symbol":"' + syminfo.ticker + '","base":"' + baseTxt + '","quote":"' + quoteTxt + '"'
+    s += ',"exchange":"' + exchangeName + '","tf":"' + timeframe.period + '","market":"' + marketType + '"'
+    s += ',"side":"' + sideTxt + '","type":"' + typeTxt + '","score":' + str.tostring(math.round(scoreV)) + ',"grade":"' + gradeV + '"'
+    s += ',"entry":' + str.tostring(en, format.mintick) + ',"sl":' + str.tostring(sl, format.mintick)
+    s += ',"tp1":' + str.tostring(t1, format.mintick) + ',"tp2":' + str.tostring(t2, format.mintick)
+    s += ',"tp1_frac":' + str.tostring(tp1F, "#.###") + ',"be_after_tp1":true'
+    s += ',"risk_pct_price":' + str.tostring(rpx, "#.###") + ',"risk_pct_equity":' + str.tostring(riskPctEq, "#.###")
+    s += ',"order_type":"MARKET","max_slippage_pct":' + str.tostring(slipPct * 2, "#.####")
+    s += ',"signal_ttl_sec":' + str.tostring(math.round(chartSec * sigTtlMult))
+    s += ',"atr":' + str.tostring(atr, format.mintick) + ',"bar_time":' + str.tostring(time) + ',"ts":' + str.tostring(timenow)
+    // Features object
+    s += ',"features":{"tier":' + str.tostring(not na(pc.z) ? pc.z.tier : 0)
+    s += ',"touches":' + str.tostring(not na(pc.z) ? pc.z.touches : 0)
+    s += ',"qual_touches":' + str.tostring(not na(pc.z) ? pc.z.qualTouches : 0)
+    s += ',"reaction":' + (not na(pc.z) and pc.z.reactionEarned ? "true" : "false")
+    s += ',"displacement":' + str.tostring(not na(pc.z) ? pc.z.displacement : 0.0, "#.##")
+    s += ',"htf":' + (pc.htfC ? "true" : "false")
+    s += ',"mtf":' + (pc.mtfC ? "true" : "false")
+    s += ',"vol":' + str.tostring(volState)
+    s += ',"trend_align":' + str.tostring(trendRegime)
+    s += ',"wick_frac":' + str.tostring(pc.wickF, "#.##")
+    s += ',"flip":' + (not na(pc.z) and pc.z.flipped ? "true" : "false")
+    s += ',"atr_pct":' + str.tostring(atrPercentile, "#.#")
+    s += ',"zone_score":' + str.tostring(pc.zoneScore, "#.#")
+    s += ',"setup_score":' + str.tostring(pc.setupScore, "#.#")
+    s += ',"ctx_score":' + str.tostring(pc.ctxScore, "#.#")
+    s += ',"setup":"' + typeTxt + '"'
+    s += ',"structure":"' + (structureState == 1 ? "UP" : structureState == -1 ? "DOWN" : "RANGE") + '"'
+    s += ',"regime":"' + f_regimeStr() + '"'
+    s += '}'
+    s += ',"reason":"' + why + '"}'
+    s
+
+f_jsonExit(string idv, string sideTxt, string reasonTxt, float netR, float grossR, float px, int bars) =>
+    string s = '{"v":3,"passphrase":"' + alertPass + '","event":"EXIT","id":"' + idv + '"'
+    s += ',"strategy":"' + strategyName + '","symbol":"' + syminfo.ticker + '","side":"' + sideTxt + '","reason":"' + reasonTxt + '"'
+    s += ',"price":' + str.tostring(px, format.mintick) + ',"r_gross":' + str.tostring(grossR, "#.###") + ',"r_net":' + str.tostring(netR, "#.###")
+    s += ',"bars":' + str.tostring(bars) + ',"bar_time":' + str.tostring(time) + ',"ts":' + str.tostring(timenow) + '}'
+    s
+
+f_jsonHb(bool openTrade) =>
+    string s = '{"v":3,"passphrase":"' + alertPass + '","event":"HEARTBEAT","strategy":"' + strategyName + '"'
+    s += ',"symbol":"' + syminfo.ticker + '","tf":"' + timeframe.period + '","close":' + str.tostring(close, format.mintick)
+    s += ',"open_trade":' + (openTrade ? "true" : "false") + ',"bar_time":' + str.tostring(time) + ',"ts":' + str.tostring(timenow) + '}'
+    s
+
+// ============================================================================================
+// STATE: virtual trade + stats + signal bookkeeping
+// BUG-01 fix: separate WIN/LOSS/BE/TIME_EXIT accounting
+// ============================================================================================
+var bool   tOpen     = false
+var int    tDir      = 0
+var float  tEntry    = na
+var float  tSL       = na
+var float  tTP1      = na
+var float  tTP2      = na
+var float  tRisk     = na
+var float  tCostR    = 0.0
+var bool   tTP1Hit   = false
+var bool   tTP2Hit   = false
+var bool   tTrailAct = false
+var float  tTrailStop = na
+var float  tBestClose = na
+var float  tRealR    = 0.0
+var int    tBars     = 0
+var string tId       = ""
+var string tSide     = ""
+var int    tSetup    = 0
+
+// BUG-01 fix: separate outcome counters
+var int    stTrades   = 0
+var int    stWins     = 0    // TP2 or net > 0
+var int    stLosses   = 0    // SL hit
+var int    stBE       = 0    // BE after TP1
+var int    stTimeExit = 0    // time stop
+var float  stSumWin   = 0.0
+var float  stSumLoss  = 0.0
+var float  stSumBE    = 0.0
+var float  stNetR     = 0.0
+var float  stPeak     = 0.0
+var float  stMaxDD    = 0.0
+var int    stLossStreak = 0
+var int    stMaxLossStreak = 0
+var int    lastSigBarIdx = 0
+var string lastSigText   = "none"
+var int    sigDayKey     = 0
+var int    sigsToday     = 0
+var int    seqNum        = 0   // BUG-14 fix: monotonic sequence
+
+bool   entryEvt   = false
+bool   exitEvt    = false
+bool   longSig    = false
+bool   shortSig   = false
+string entryJson  = ""
+string exitReason = ""
+float  exitNetR   = 0.0
+float  exitGrossR = 0.0
+float  exitPx     = na
+int    exitBars   = 0
+string exitId     = ""
+string exitSide   = ""
+
+// ---- 1) manage the open virtual trade (BUG-03 fix: same-bar TP1→BE recheck) ----
+if confirmed and tOpen
+    tBars += 1
+    
+    // FIX-5: Calculate remaining fraction based on which TPs have been hit
+    float remF = 1.0
+    if tTP2Hit
+        remF := tp3F
+    else if tTP1Hit
+        remF := tp2F + tp3F
+    
+    bool stopHit = tDir == 1 ? low <= tSL : high >= tSL
+    bool tp1Reached = tDir == 1 ? high >= tTP1 : low <= tTP1
+    bool tp2Reached = tDir == 1 ? high >= tTP2 : low <= tTP2
+    bool trailHit = false
+    if tTrailAct and not na(tTrailStop)
+        trailHit := tDir == 1 ? low <= tTrailStop : high >= tTrailStop
+
+    bool closeOut = false
+    float xPx = na
+    string xWhy = ""
+    float xGross = 0.0
+    int xType = 0
+
+    // Step 1: Check stop/trail FIRST (conservative)
+    if trailHit and tTrailAct
+        closeOut := true
+        xPx := tTrailStop
+        xWhy := "TRAIL"
+        xType := X_TRAIL_EXIT
+        xGross := tRealR + tp3F * (tDir * (tTrailStop - tEntry) / tRisk)
+    else if stopHit
+        closeOut := true
+        xPx := tSL
+        if tTP1Hit
+            xWhy := "BE"
+            xType := X_BE_AFTER_TP1
+        else
+            xWhy := "SL"
+            xType := X_STOP_LOSS
+        xGross := tRealR + remF * (tDir * (tSL - tEntry) / tRisk)
+    else
+        // Step 2: Check TP1
+        if not tTP1Hit and tp1Reached
+            tRealR += tp1F * tp1R
+            tTP1Hit := true
+            tSL := tEntry    // Move stop to BE
+            remF := tp2F + tp3F
+            // BUG-03 fix: SAME-BAR RECHECK of the new BE stop
+            bool beHitSameBar = tDir == 1 ? low <= tEntry : high >= tEntry
+            if beHitSameBar
+                closeOut := true
+                xPx := tEntry
+                xWhy := "BE"
+                xType := X_BE_AFTER_TP1
+                xGross := tRealR   // partial already banked
+
+        // Step 3: Check TP2
+        if not closeOut and tTP1Hit and not tTP2Hit and tp2Reached
+            tRealR += tp2F * tp2R
+            tTP2Hit := true
+            // FIX-5: Activate trailing stop on the remaining tp3_frac
+            if tp3F > 0.001
+                tTrailAct := true
+                tBestClose := close
+                tTrailStop := tTP1
+            else
+                closeOut := true
+                xPx := tTP2
+                xWhy := "TP2"
+                xType := X_TP2
+                xGross := tRealR
+
+        // Update trailing stop if active
+        if not closeOut and tTrailAct and atr > 0
+            if tDir == 1
+                float newTrail = close - trailATR * atr
+                if na(tTrailStop) or newTrail > tTrailStop
+                    tTrailStop := newTrail
+                if na(tBestClose) or close > tBestClose
+                    tBestClose := close
+            else
+                float newTrail = close + trailATR * atr
+                if na(tTrailStop) or newTrail < tTrailStop
+                    tTrailStop := newTrail
+                if na(tBestClose) or close < tBestClose
+                    tBestClose := close
+
+        // Step 4: Time stop
+        if not closeOut and tBars >= timeStopBars
+            closeOut := true
+            xPx := close
+            xWhy := "TIME"
+            xType := X_TIME_STOP
+            xGross := tRealR + remF * (tDir * (close - tEntry) / tRisk)
+
+    if closeOut
+        float netR = xGross - tCostR
+        exitEvt := true
+        exitReason := xWhy
+        exitNetR := netR
+        exitGrossR := xGross
+        exitPx := xPx
+        exitBars := tBars
+        exitId := tId
+        exitSide := tSide
+
+        // BUG-01 fix: separate accounting
+        stTrades += 1
+        if xType == X_STOP_LOSS
+            stLosses += 1
+            stSumLoss += netR
+            stLossStreak += 1
+            stMaxLossStreak := math.max(stMaxLossStreak, stLossStreak)
+        else if xType == X_BE_AFTER_TP1
+            stBE += 1
+            stSumBE += netR
+            stLossStreak := 0
+        else if xType == X_TP2 or xType == X_TRAIL_EXIT
+            stWins += 1
+            stSumWin += netR
+            stLossStreak := 0
+        else if xType == X_TIME_STOP
+            stTimeExit += 1
+            if netR > 0.1
+                stSumWin += netR
+                stWins += 1
+            else if netR < -0.1
+                stSumLoss += netR
+                stLosses += 1
+            else
+                stSumBE += netR
+                stBE += 1
+            stLossStreak := netR < 0 ? stLossStreak + 1 : 0
+            stMaxLossStreak := math.max(stMaxLossStreak, stLossStreak)
+
+        stNetR += netR
+        stPeak := math.max(stPeak, stNetR)
+        stMaxDD := math.max(stMaxDD, stPeak - stNetR)
+        tOpen := false
+
+        if tVis.size() > 0
+            tradeVis tvx = tVis.last()
+            box.set_right(tvx.rb, bar_index)
+            box.set_right(tvx.gb, bar_index)
+            line.set_x2(tvx.l1, bar_index)
+            label.set_text(tvx.lb, tvx.tag + " " + (netR > 0 ? "+" : "") + str.tostring(netR, "#.##") + "R " + xWhy)
+    else
+        if tVis.size() > 0
+            tradeVis tvo = tVis.last()
+            box.set_right(tvo.rb, bar_index + 1)
+            box.set_right(tvo.gb, bar_index + 1)
+            line.set_x2(tvo.l1, bar_index + 1)
+
+    // --- NATIVE STRATEGY EXITS ---
+    if closeOut and xType == X_TIME_STOP
+        strategy.close_all(comment = "TIME")
+    else if closeOut and xType == X_TRAIL_EXIT
+        strategy.close_all(comment = "TRAIL")
+    else if tOpen
+        string stratId = tDir == 1 ? "Long" : "Short"
+        float tSL_native = tTrailAct and not na(tTrailStop) ? tTrailStop : tSL
+        
+        // Due to Pine constraints, if we use qty_percent, the remaining qty is for the next exits
+        // Using trailing stop natively is complex, we'll manually exit when our logic says so.
+        // We still provide limits
+        strategy.exit("TP1", stratId, qty_percent = tp1F * 100, limit = tTP1, stop = tSL_native)
+        // If tp3F > 0, we only exit tp2F at TP2.
+        float tp2QtyPct = tp3F > 0 ? (tp2F / (tp2F + tp3F)) * 100 : 100
+        strategy.exit("TP2", stratId, qty_percent = tp2QtyPct, limit = tTP2, stop = tSL_native)
+        
+        if tp3F > 0
+            strategy.exit("TRAIL", stratId, stop = tSL_native)
+
+// ---- 2) BUG-20 fix: day bookkeeping uses bar CLOSE time ----
+int dayKey = year(time_close, "UTC") * 10000 + month(time_close, "UTC") * 100 + dayofmonth(time_close, "UTC")
+if confirmed and dayKey != sigDayKey
+    sigDayKey := dayKey
+    sigsToday := 0
+
+// BUG-20 fix: session check uses time_close
+sessTime = time(timeframe.period, sessionStr, "UTC")
+bool inSession = sessionStr == "0000-2359" or not na(sessTime)
+bool wkdBlock  = skipWeekends and (dayofweek(time_close, "UTC") == dayofweek.saturday or dayofweek(time_close, "UTC") == dayofweek.sunday)
+bool cdOK      = bar_index - lastSigBarIdx >= sigCooldown
+// Spot short block
+bool shortAllowed = allowShort and not isSpot
+bool sigOK     = confirmed and insideLookback and sigEnable and inSession and not wkdBlock and cdOK and sigsToday < maxSigPerDay and not tOpen and not na(atr) and atr > 0
+
+// BUG-15 fix: compute feasibility band and warn
+float minRiskPct = 2.0 * (feePct + slipPct) / maxCostR
+float maxRiskPct = maxRiskATR * atrPct / 100.0
+bool feasible = maxRiskPct > 0 and minRiskPct < maxRiskPct
+
+// ---- 3) BUG-14 fix: process EXIT before ENTRY on same bar ----
+// (exitEvt is set above; entryEvt will be set below. Alert emission order fixed later.)
+
+// ---- 4) scan zones, score, apply risk gates, fire ----
+if sigOK and feasible
+    sigCand cL = sigCand.new()
+    sigCand cS = sigCand.new()
+    if allowLong
+        cL := f_scanZones(true, cL)
+    if shortAllowed
+        cS := f_scanZones(false, cS)
+
+    bool haveL = not na(cL.z)
+    bool haveS = not na(cS.z)
+    int pickDir = 0
+    if haveL and haveS
+        pickDir := cL.score >= cS.score ? 1 : -1
+    else if haveL
+        pickDir := 1
+    else if haveS
+        pickDir := -1
+
+    if pickDir != 0
+        sigCand pc = pickDir == 1 ? cL : cS
+        zoneObj pz = pc.z
+        float en = close
+        float slp = pickDir == 1 ? math.min(pz.btm, low) - slBufferATR * atr : math.max(pz.top, high) + slBufferATR * atr
+        float rk = math.abs(en - slp)
+        bool riskOK = rk > 0 and rk <= maxRiskATR * atr
+        float oppLvl = f_oppIn(pickDir == 1, en)
+        bool roomOK = na(oppLvl) or math.abs(oppLvl - en) >= minRoomR * rk
+        float rpx = rk / en * 100.0
+        float cr = rpx > 0 ? 2.0 * (feePct + slipPct) / rpx : 99.0
+        bool costOK = cr <= maxCostR
+
+        if riskOK and roomOK and costOK
+            float t1 = en + pickDir * tp1R * rk
+            float t2 = en + pickDir * tp2R * rk
+            string sideTxt = pickDir == 1 ? "LONG" : "SHORT"
+            string typeTxt = f_setupName(pc.setupType)
+            string gradeTxt = pc.score >= 80 ? "A" : pc.score >= 65 ? "B" : "C"
+            seqNum += 1
+            string idv = syminfo.ticker + "_" + timeframe.period + "_" + str.tostring(time) + "_" + sideTxt
+            string evtId = idv + "_" + str.tostring(seqNum)
+            string why = typeTxt + " " + (pz.tier == 2 ? "Elite" : "Strong") + " Q" + str.tostring(math.round(pz.qualityScore)) + (pc.htfC ? " +HTF" : "") + (pc.mtfC ? " +MTF" : "") + " t=" + str.tostring(pz.touches) + " w=" + str.tostring(pc.wickF, "#.##")
+
+            tOpen := true
+            tDir := pickDir
+            tEntry := en
+            tSL := slp
+            tTP1 := t1
+            tTP2 := t2
+            tRisk := rk
+            tCostR := cr
+            tTP1Hit := false
+            tRealR := 0.0
+            tBars := 0
+            tId := idv
+            tSide := sideTxt
+            tSetup := pc.setupType
+            sigsToday += 1
+            lastSigBarIdx := bar_index
+            lastSigText := sideTxt + " " + gradeTxt + str.tostring(math.round(pc.score)) + " " + typeTxt + " @ " + str.tostring(en, format.mintick)
+            pz.sigCount += 1
+            pz.lastSigBar := bar_index
+            entryEvt := true
+            longSig := pickDir == 1
+            shortSig := pickDir == -1
+            entryJson := f_jsonEntry(idv, evtId, sideTxt, typeTxt, pc.score, gradeTxt, en, slp, t1, t2, rpx, why, pc)
+
+            if showTrades
+                color lc = pickDir == 1 ? color.new(#00c853, 0) : color.new(#ff1744, 0)
+                string tagTxt = (pz.flipped ? "FLIP " : "") + (pickDir == 1 ? "BUY " : "SELL ") + gradeTxt + str.tostring(math.round(pc.score)) + " " + f_setupName(pc.setupType)
+                label lbn = label.new(bar_index, pickDir == 1 ? low : high, tagTxt, style = pickDir == 1 ? label.style_label_up : label.style_label_down, color = lc, textcolor = color.white, size = size.small)
+                float rTop = pickDir == 1 ? en : slp
+                float rBot = pickDir == 1 ? slp : en
+                float gTop = pickDir == 1 ? t2 : en
+                float gBot = pickDir == 1 ? en : t2
+                box rbx = box.new(bar_index, rTop, bar_index + 1, rBot, border_color = na, bgcolor = color.new(#ff1744, 82))
+                box gbx = box.new(bar_index, gTop, bar_index + 1, gBot, border_color = na, bgcolor = color.new(#00c853, 82))
+                line l1x = line.new(bar_index, t1, bar_index + 1, t1, color = color.new(#00c853, 20), style = line.style_dotted, width = 1)
+                tVis.push(tradeVis.new(rbx, gbx, l1x, lbn, pickDir, tagTxt))
+                if tVis.size() > keepTrades
+                    tradeVis oldTv = tVis.shift()
+                    box.delete(oldTv.rb)
+                    box.delete(oldTv.gb)
+                    line.delete(oldTv.l1)
+                    label.delete(oldTv.lb)
+
+            // --- NATIVE STRATEGY ENTRY ---
+            float riskAmount = strategy.equity * (riskPctEq / 100.0)
+            float qty = riskAmount / rk
+            if pickDir == 1
+                strategy.entry("Long", strategy.long, qty=qty)
+            else
+                strategy.entry("Short", strategy.short, qty=qty)
+
+// ============================================================================================
+// ALERTS  (BUG-14 fix: EXIT emitted before ENTRY; BUG-22 fix: one contract, versioned)
+// ============================================================================================
+if exitEvt and sendExit
+    alert(f_jsonExit(exitId, exitSide, exitReason, exitNetR, exitGrossR, exitPx, exitBars), alert.freq_once_per_bar_close)
+if entryEvt
+    alert(entryJson, alert.freq_once_per_bar_close)
+if hbEnable and confirmed and bar_index % hbBars == 0
+    alert(f_jsonHb(tOpen), alert.freq_once_per_bar_close)
+
+// BUG-22 fix: alertcondition messages clearly marked as NON-AUTHENTICATED
+alertcondition(longSig, title = "ASR Long (non-auth)", message = '{"v":3,"event":"ENTRY","side":"LONG","symbol":"{{ticker}}","tf":"{{interval}}","price":{{close}},"ts":{{timenow}},"auth":"NONE"}')
+alertcondition(shortSig, title = "ASR Short (non-auth)", message = '{"v":3,"event":"ENTRY","side":"SHORT","symbol":"{{ticker}}","tf":"{{interval}}","price":{{close}},"ts":{{timenow}},"auth":"NONE"}')
+alertcondition(exitEvt, title = "ASR Exit (non-auth)", message = '{"v":3,"event":"EXIT","symbol":"{{ticker}}","tf":"{{interval}}","price":{{close}},"ts":{{timenow}},"auth":"NONE"}')
+
+// ============================================================================================
+// PLOTS
+// ============================================================================================
+plot(showHtfEma and trendMode != "Off" ? tEma : na, "HTF Trend EMA", color = color.new(color.orange, 30), linewidth = 1, style = plot.style_stepline)
+plot(showVwap and hasVolData ? vwapVal : na, "Session VWAP", color = color.new(color.purple, 40), linewidth = 1, style = plot.style_stepline)
+
+// ============================================================================================
+// DASHBOARD  (BUG-01/02 fix: separate WIN/LOSS/BE/TIME, expectancy, feasibility)
+// ============================================================================================
+f_row(table t, int r, string k, string v, color vc) =>
+    table.cell(t, 0, r, k, text_color = color.new(color.white, 25), text_halign = text.align_left, text_size = size.small, bgcolor = color.new(#161b22, 0))
+    table.cell(t, 1, r, v, text_color = vc, text_halign = text.align_right, text_size = size.small, bgcolor = color.new(#0d1117, 0))
+    true
+
+f_zoneStats(float px, float a) =>
+    int dEl = 0
+    int dSt = 0
+    int sEl = 0
+    int sSt = 0
+    float nDem = na
+    float nSup = na
+    for z in zones
+        if z.tier >= 1 and z.status >= Z_ACTIVE and z.status <= Z_FLIPPED
+            if z.isBull
+                if z.tier == 2
+                    dEl += 1
+                else
+                    dSt += 1
+                if z.btm <= px and a > 0
+                    float d1 = math.max(0.0, px - z.top) / a
+                    nDem := na(nDem) ? d1 : math.min(nDem, d1)
+            else
+                if z.tier == 2
+                    sEl += 1
+                else
+                    sSt += 1
+                if z.top >= px and a > 0
+                    float d2 = math.max(0.0, z.btm - px) / a
+                    nSup := na(nSup) ? d2 : math.min(nSup, d2)
+    [dEl, dSt, sEl, sSt, nDem, nSup]
+
+f_distTxt(float d) =>
+    na(d) ? "-" : str.tostring(d, "#.#") + " ATR"
+
+var table dash = showDash ? table.new(dashPos == "Top Left" ? position.top_left : dashPos == "Middle Right" ? position.middle_right : dashPos == "Bottom Left" ? position.bottom_left : dashPos == "Bottom Right" ? position.bottom_right : position.top_right, 2, 22, bgcolor = color.new(#0d1117, 10), frame_color = color.new(color.gray, 60), frame_width = 1, border_color = color.new(color.gray, 75), border_width = 1) : na
+
+if barstate.islast and showDash
+    [dEl, dSt, sEl, sSt, nDem, nSup] = f_zoneStats(close, atr)
+
+    // BUG-02 fix: expectancy calculation
+    float expectancy = stTrades > 0 ? stNetR / stTrades : na
+    float winRateExBE = stTrades > 0 ? stWins * 100.0 / stTrades : na
+    float beRate = stTrades > 0 ? stBE * 100.0 / stTrades : na
+    float lossRate = stTrades > 0 ? stLosses * 100.0 / stTrades : na
+    float pf = stSumLoss < 0 ? stSumWin / math.abs(stSumLoss) : na
+
+    string openTxt = "none"
+    if tOpen
+        float unreal = tDir * (close - tEntry) / tRisk
+        float remFr = tTP1Hit ? 1.0 - tp1F : 1.0
+        float openR = tRealR + remFr * unreal
+        openTxt := (tDir == 1 ? "LONG " : "SHORT ") + (openR > 0 ? "+" : "") + str.tostring(openR, "#.##") + "R"
+
+    string lastTxt = lastSigText == "none" ? "none" : lastSigText + " (" + str.tostring(bar_index - lastSigBarIdx) + " bars ago)"
+
+    int row = 0
+    f_row(dash, row, "ASR ENGINE", timeframe.period + " | " + syminfo.ticker, color.aqua)
+    row += 1
+    f_row(dash, row, "Asset / Market", assetType + " / " + marketType, color.white)
+    row += 1
+    f_row(dash, row, "Regime", f_regimeStr(), trendRegime == 1 ? color.lime : trendRegime == -1 ? color.red : color.gray)
+    row += 1
+    f_row(dash, row, "Structure", structureState == 1 ? "UP (HH/HL)" : structureState == -1 ? "DOWN (LH/LL)" : "RANGE", structureState == 1 ? color.lime : structureState == -1 ? color.red : color.gray)
+    row += 1
+    f_row(dash, row, "ATR Percentile", str.tostring(atrPercentile, "#.#") + "%", volRegime == 1 ? color.orange : volRegime == -1 ? color.aqua : color.white)
+    row += 1
+    f_row(dash, row, "Demand Zones", str.tostring(dEl) + " Elite / " + str.tostring(dSt) + " Strong", color.lime)
+    row += 1
+    f_row(dash, row, "Supply Zones", str.tostring(sEl) + " Elite / " + str.tostring(sSt) + " Strong", color.red)
+    row += 1
+    f_row(dash, row, "Nearest Demand", f_distTxt(nDem), color.white)
+    row += 1
+    f_row(dash, row, "Nearest Supply", f_distTxt(nSup), color.white)
+    row += 1
+    f_row(dash, row, "Last Signal", lastTxt, color.yellow)
+    row += 1
+    f_row(dash, row, "Open Trade", openTxt, tOpen ? color.aqua : color.gray)
+    row += 1
+    f_row(dash, row, "Trades", str.tostring(stTrades) + (stTrades < 30 ? " ⚠ low N" : ""), color.white)
+    row += 1
+    f_row(dash, row, "Win / BE / Loss", str.tostring(stWins) + " / " + str.tostring(stBE) + " / " + str.tostring(stLosses), color.white)
+    row += 1
+    f_row(dash, row, "Win% (ex BE)", na(winRateExBE) ? "-" : str.tostring(winRateExBE, "#.#") + "%", color.white)
+    row += 1
+    f_row(dash, row, "BE%", na(beRate) ? "-" : str.tostring(beRate, "#.#") + "%", color.gray)
+    row += 1
+    f_row(dash, row, "Expectancy (R)", na(expectancy) ? "-" : str.tostring(expectancy, "#.###") + " R", expectancy > 0 ? color.lime : color.red)
+    row += 1
+    f_row(dash, row, "Net R / PF", str.tostring(stNetR, "#.##") + " / " + (na(pf) ? (stSumWin > 0 ? "∞" : "-") : str.tostring(pf, "#.##")), stNetR >= 0 ? color.lime : color.red)
+    row += 1
+    f_row(dash, row, "Max DD / Loss Streak", str.tostring(stMaxDD, "#.##") + "R / " + str.tostring(stMaxLossStreak), color.orange)
+    row += 1
+    f_row(dash, row, "Cost Band", feasible ? "OK (ATR%=" + str.tostring(atrPct, "#.##") + ")" : "EMPTY — no signals possible!", feasible ? color.lime : color.red)
+    row += 1
+    f_row(dash, row, "Webhook", alertPass == "CHANGE_ME" ? "SET PASSPHRASE" : "passphrase set", alertPass == "CHANGE_ME" ? color.red : color.lime)
+    row += 1
+    f_row(dash, row, "Volume Data", hasVolData ? "Available" : "NONE — vol filters off", hasVolData ? color.lime : color.orange)
+    row += 1
+    f_row(dash, row, "Mode", isSpot ? "SPOT (shorts disabled)" : "Confirmed bars only", isSpot ? color.yellow : color.gray)
+
+// ============================================================================================
+// PREVIOUS DAY / WEEK LEVELS
+// ============================================================================================
+var line pdh_line = na
+var line pdl_line = na
+var label pdh_lbl = na
+var label pdl_lbl = na
+var line pwh_line = na
+var line pwl_line = na
+var label pwh_lbl = na
+var label pwl_lbl = na
+var int line_start_gap = 20
+var int text_pos_gap = 40
+
+if barstate.islast
+    pdh_text = "PDH : " + str.tostring(pdh, format.mintick)
+    pdl_text = "PDL : " + str.tostring(pdl, format.mintick)
+    if na(pdh_line)
+        pdh_line := line.new(bar_index + line_start_gap, pdh, bar_index + line_start_gap + 1, pdh, color = color.gray, style = line.style_dashed, width = 1, extend = extend.right)
+        pdl_line := line.new(bar_index + line_start_gap, pdl, bar_index + line_start_gap + 1, pdl, color = color.gray, style = line.style_dashed, width = 1, extend = extend.right)
+        pdh_lbl := label.new(bar_index + text_pos_gap, pdh, pdh_text, style = label.style_none, textcolor = color.gray, size = size.small)
+        pdl_lbl := label.new(bar_index + text_pos_gap, pdl, pdl_text, style = label.style_none, textcolor = color.gray, size = size.small)
+    else
+        line.set_xy1(pdh_line, bar_index + line_start_gap, pdh)
+        line.set_xy2(pdh_line, bar_index + line_start_gap + 1, pdh)
+        line.set_xy1(pdl_line, bar_index + line_start_gap, pdl)
+        line.set_xy2(pdl_line, bar_index + line_start_gap + 1, pdl)
+        label.set_xy(pdh_lbl, bar_index + text_pos_gap, pdh)
+        label.set_text(pdh_lbl, pdh_text)
+        label.set_xy(pdl_lbl, bar_index + text_pos_gap, pdl)
+        label.set_text(pdl_lbl, pdl_text)
+
+    pwh_text = "PWH : " + str.tostring(pwh, format.mintick)
+    pwl_text = "PWL : " + str.tostring(pwl, format.mintick)
+    if na(pwh_line)
+        pwh_line := line.new(bar_index + line_start_gap, pwh, bar_index + line_start_gap + 1, pwh, color = color.new(color.white, 40), style = line.style_dotted, width = 2, extend = extend.right)
+        pwl_line := line.new(bar_index + line_start_gap, pwl, bar_index + line_start_gap + 1, pwl, color = color.new(color.white, 40), style = line.style_dotted, width = 2, extend = extend.right)
+        pwh_lbl := label.new(bar_index + text_pos_gap, pwh, pwh_text, style = label.style_none, textcolor = color.new(color.white, 40), size = size.small)
+        pwl_lbl := label.new(bar_index + text_pos_gap, pwl, pwl_text, style = label.style_none, textcolor = color.new(color.white, 40), size = size.small)
+    else
+        line.set_xy1(pwh_line, bar_index + line_start_gap, pwh)
+        line.set_xy2(pwh_line, bar_index + line_start_gap + 1, pwh)
+        line.set_xy1(pwl_line, bar_index + line_start_gap, pwl)
+        line.set_xy2(pwl_line, bar_index + line_start_gap + 1, pwl)
+        label.set_xy(pwh_lbl, bar_index + text_pos_gap, pwh)
+        label.set_text(pwh_lbl, pwh_text)
+        label.set_xy(pwl_lbl, bar_index + text_pos_gap, pwl)
+        label.set_text(pwl_lbl, pwl_text)
+
+// ============================================================================================
+// END OF ASR ENGINE
+// ============================================================================================

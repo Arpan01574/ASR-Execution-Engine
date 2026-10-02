@@ -1,0 +1,10 @@
+2026-10-03 21:53:31,378 | INFO     | AutoTrader           | Loaded 10 trading slots | Total capital: $10,000.00
+2026-10-03 21:53:31,384 | INFO     | AutoTrader           | 🔧 Connected to Binance TESTNET (demo mode)
+2026-10-03 21:53:32,410 | INFO     | AutoTrader           | ✅ Markets loaded: 740 pairs available
+2026-10-03 21:53:32,459 | WARNING  | AutoTrader           | Could not fetch balance: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:53:32,460 | INFO     | AutoTrader           | 🚀 Auto Trader STARTED | 10 slots | Cycle interval: 20s
+2026-10-03 21:53:32,460 | INFO     | AutoTrader           | ============================================================
+2026-10-03 21:53:32,575 | WARNING  | ccxt.base.exchange   | binanceusdm requires to release all resources with an explicit call to the .close() coroutine. If you are using the exchange instance with async coroutines, add `await exchange.close()` to your code into a place when you're done with the exchange and don't need the exchange instance anymore (at the end of your async coroutine).
+2026-10-03 21:53:32,576 | ERROR    | asyncio              | Unclosed connector
+connections: ['deque([(<aiohttp.client_proto.ResponseHandler object at 0x00000237781362E0>, 554494.7979943)])']
+connector: <aiohttp.connector.TCPConnector object at 0x00000237780D1D30>
