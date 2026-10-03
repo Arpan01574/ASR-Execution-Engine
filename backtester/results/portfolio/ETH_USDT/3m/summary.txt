@@ -1,0 +1,13 @@
+ASR Engine v3 — ETH_USDT_3m Backtest Summary
+==================================================
+Trades:      186
+Expectancy:  0.8252 R
+Win Rate:    60.1%
+Profit Fac:  6.99
+Start:       $10,000
+Final:       $21,306
+PnL:         $+11,306
+Return:      +113.06%
+Max DD:      4.59%
+Sharpe ($):  5.659
+CAGR:        0.00%
