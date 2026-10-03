@@ -1,0 +1,13 @@
+ASR Engine v3 — BNB_USDT_5m Backtest Summary
+==================================================
+Trades:      198
+Expectancy:  0.6806 R
+Win Rate:    58.8%
+Profit Fac:  6.57
+Start:       $10,000
+Final:       $19,470
+PnL:         $+9,470
+Return:      +94.70%
+Max DD:      1.88%
+Sharpe ($):  6.716
+CAGR:        0.00%
