@@ -1,0 +1,13 @@
+ASR Engine v3 — SOL_USDT_2h Backtest Summary
+==================================================
+Trades:      117
+Expectancy:  0.3351 R
+Win Rate:    64.2%
+Profit Fac:  5.38
+Start:       $10,000
+Final:       $12,154
+PnL:         $+2,154
+Return:      +21.54%
+Max DD:      0.59%
+Sharpe ($):  7.096
+CAGR:        0.00%

@@ -1,0 +1,132 @@
+
+============================================================
+  ASR ENGINE v3 — PAPER TRADING SIMULATION REPORT
+============================================================
+
+============================================================
+ Signal Funnel
+============================================================
+  Total Signals Generated:           75
+  Allowed (Executed):                75
+  Rejected — Risk Gate:               0
+  Rejected — Drift Guard:             0
+  Rejected — Sizing:                  0
+  Total Fills:                       75
+
+============================================================
+ Position Outcomes
+============================================================
+  Positions Closed:                  75
+  Wins:                              43
+  Losses:                            26
+  Breakevens:                         6
+  Win Rate (ex BE):              62.3%
+
+============================================================
+ Financial Summary
+============================================================
+  Initial Capital:           $   10,000.00
+  Final Equity:              $  161,259.27
+  Gross PnL:                 $ +155,970.59
+  Total Fees:                $    3,152.11
+  Net PnL:                   $ +152,818.48
+  Return:                      +1512.59%
+
+============================================================
+ Risk Metrics
+============================================================
+  Peak Equity:               $  162,093.21
+  Max Drawdown:              $    2,539.11
+  Max Drawdown %:                  1.64%
+  Avg Win R:                   +14.4276
+  Avg Loss R:                   -0.4591
+  Expectancy R:                 +8.1145
+  Profit Factor:                 22.248
+
+============================================================
+ Execution Quality
+============================================================
+  Avg Latency (ms):               17.03
+  Avg Slippage (%):              0.1027
+
+============================================================
+ Trade Log (All Positions)
+============================================================
+
+  #    Dir         Entry          Exit      Type         PnL         R   Score  Setup             
+----------------------------------------------------------------------------------------------------
+  1   LONG      26569.67      26081.81        SL     -105.34    -1.049    51.8  ZONE_REJECT       
+  2   LONG      26942.15      27870.55     TRAIL    +1762.19   +16.919    68.8  FLIP_RETEST       
+  3   LONG      27585.80      27870.55     TRAIL      +57.77    +0.495    66.5  FLIP_RETEST       
+  4   LONG      27818.50      27870.55     TRAIL       +4.76    +0.041    62.6  FLIP_RETEST       
+  5   LONG      26917.39      27870.55     TRAIL     +271.92    +2.313    64.7  FLIP_RETEST       
+  6   LONG      36634.92      36559.65     TRAIL      -10.35    -0.086    64.9  FLIP_RETEST       
+  7   LONG      36472.42      36559.65     TRAIL       +7.60    +0.063    69.6  FLIP_RETEST       
+  8   LONG      45166.62      44313.42     TRAIL      -80.90    -0.679    66.4  FLIP_RETEST       
+  9   LONG      46921.99      45651.14     TRAIL      -81.09    -0.689    65.9  FLIP_RETEST       
+ 10   LONG      46408.92      45651.14     TRAIL      -53.24    -0.454    69.7  FLIP_RETEST       
+ 11   LONG      49745.09      51156.92     TRAIL    +1627.94   +14.615    62.4  FLIP_RETEST       
+ 12  SHORT      52254.59      51167.16     TRAIL     +109.84    +0.827    45.3  BOS_RETEST        
+ 13   LONG      51109.12      51156.92     TRAIL       +0.83    +0.006    49.0  ZONE_REJECT       
+ 14   LONG      69072.95      66579.84     TRAIL      -89.16    -0.677    48.1  ZONE_REJECT       
+ 15   LONG      69369.79      69423.69     TRAIL       -0.08    -0.001    68.4  FLIP_RETEST       
+ 16  SHORT      63833.99      64976.69     TRAIL      -70.46    -0.530    46.6  ZONE_REJECT       
+ 17  SHORT      62845.71      62752.94     TRAIL       +4.08    +0.031    59.0  ZONE_REJECT       
+ 18   LONG      68046.29      68208.36     TRAIL       +6.13    +0.046    70.7  FLIP_RETEST       
+ 19   LONG      68402.24      68208.36     TRAIL      -15.41    -0.116    64.4  FLIP_RETEST       
+ 20  SHORT      69535.15      68222.01     TRAIL      +84.29    +0.636    53.9  ZONE_REJECT       
+ 21   LONG      66446.20      68208.36     TRAIL     +141.79    +1.059    51.9  FLIP_RETEST       
+ 22  SHORT      65282.26      60580.58     TRAIL    +6349.07   +50.412    67.9  FLIP_RETEST       
+ 23   LONG      59098.59      60568.46     TRAIL     +156.42    +0.789    50.6  ZONE_REJECT       
+ 24  SHORT      65217.10      60580.58     TRAIL     +467.79    +2.346    53.6  FLIP_RETEST       
+ 25   LONG      67008.26      66784.98     TRAIL      -27.68    -0.135    74.2  FLIP_RETEST       
+ 26  SHORT      69562.20      66798.34     TRAIL     +357.63    +1.756    51.4  ZONE_REJECT       
+ 27   LONG      58592.98      66784.98     TRAIL    +1017.73    +4.921    45.2  ZONE_REJECT       
+ 28  SHORT      55125.33      56171.59     TRAIL     -130.89    -0.601    57.8  FLIP_RETEST       
+ 29   LONG      56825.71      56160.36     TRAIL      -71.77    -0.333    53.0  FLIP_RETEST       
+ 30  SHORT      60042.30      56171.59     TRAIL     +458.91    +2.136    62.8  FLIP_RETEST       
+ 31  SHORT      61840.09      56171.59     TRAIL     +764.50    +3.474    61.8  FLIP_RETEST       
+ 32  SHORT      61761.78      56171.59     TRAIL     +798.19    +3.502    59.5  FLIP_RETEST       
+ 33  SHORT      65891.55      56171.59     TRAIL     +880.07    +3.760    47.3  ZONE_REJECT       
+ 34   LONG      67664.86      68249.87     TRAIL      +69.51    +0.284    65.2  FLIP_RETEST       
+ 35   LONG      67295.62      68249.87     TRAIL     +156.61    +0.636    65.8  FLIP_RETEST       
+ 36   LONG      69253.20      68589.22     TRAIL     -115.78    -0.468    46.7  FLIP_RETEST       
+ 37  SHORT      94807.22      68602.94     TRAIL    +2770.72   +11.329    53.8  ZONE_REJECT       
+ 38  SHORT     101138.24      68602.94     TRAIL    +2792.20   +10.294    51.2  ZONE_REJECT       
+ 39   LONG      99229.46      96309.22        SL     -308.84    -1.030    49.9  ZONE_REJECT       
+ 40   LONG      95986.39      96088.50     TRAIL       +2.98    +0.010    57.0  SWEEP_RECLAIM     
+ 41   LONG      95710.72      96088.50     TRAIL      +40.64    +0.136    55.6  SWEEP_RECLAIM     
+ 42  SHORT      97834.61      96107.72     TRAIL     +257.29    +0.861    45.7  ZONE_REJECT       
+ 43   LONG      82129.45      96088.50     TRAIL    +1263.79    +4.215    46.4  BOS_RETEST        
+ 44  SHORT      79064.71      77975.10     TRAIL      +83.17    +0.266    66.7  FLIP_RETEST       
+ 45   LONG     107160.86     106767.63     TRAIL      -53.63    -0.171    70.5  FLIP_RETEST       
+ 46   LONG     107111.04     106767.63     TRAIL      -52.33    -0.167    65.2  FLIP_RETEST       
+ 47   LONG     102296.32     106767.63     TRAIL     +548.46    +1.754    50.4  FLIP_RETEST       
+ 48   LONG     108237.79     120816.28     TRAIL   +23350.44   +68.946    48.2  ZONE_REJECT       
+ 49   LONG     110171.37     120816.28     TRAIL    +2089.40    +3.793    58.1  FLIP_RETEST       
+ 50  SHORT     116257.28     117064.32     TRAIL     -271.91    -0.474    52.1  SWEEP_RECLAIM     
+ 51  SHORT     116195.82     113066.66     TRAIL    +9227.79   +15.271    49.0  SWEEP_RECLAIM     
+ 52  SHORT      86844.17      88635.83     TRAIL     -379.82    -0.576    68.9  FLIP_RETEST       
+ 53  SHORT      87270.98      88635.83     TRAIL     -341.58    -0.521    66.8  FLIP_RETEST       
+ 54  SHORT      92153.86      88635.83     TRAIL     +902.78    +1.379    51.9  FLIP_RETEST       
+ 55  SHORT      89700.52      88635.83     TRAIL     +458.93    +0.690    48.1  ZONE_REJECT       
+ 56   LONG      87275.54      88618.10     TRAIL     +463.08    +0.692    46.6  BOS_RETEST        
+ 57  SHORT      89453.35      88635.83     TRAIL     +285.83    +0.425    57.0  SWEEP_RECLAIM     
+ 58  SHORT      92978.86      88635.83     TRAIL    +1550.15    +2.296    61.6  FLIP_RETEST       
+ 59  SHORT      82859.11      79206.94     TRAIL   +29803.65  +144.455    73.9  FLIP_RETEST       
+ 60   LONG      66435.33      79191.10     TRAIL    +5205.98    +5.279    47.5  ZONE_REJECT       
+ 61  SHORT      68061.89      65699.18     TRAIL   +35139.25  +218.170    46.0  ZONE_REJECT       
+ 62   LONG      66485.68      66205.15     TRAIL     -231.19    -0.167    50.7  BOS_RETEST        
+ 63   LONG      66591.91      67374.92     TRAIL     +469.02    +0.339    52.4  BOS_RETEST        
+ 64  SHORT      71269.79      67388.39     TRAIL    +2463.90    +1.775    48.2  ZONE_REJECT       
+ 65  SHORT      71148.69      67388.39     TRAIL    +2711.97    +1.917    46.3  ZONE_REJECT       
+ 66  SHORT      77614.37      67388.39     TRAIL   +11052.58    +7.654    45.8  ZONE_REJECT       
+ 67  SHORT      63707.86      64692.87     TRAIL    -1014.60    -0.654    54.3  ZONE_REJECT       
+ 68   LONG      64822.40      64679.93     TRAIL     -193.30    -0.125    62.8  FLIP_RETEST       
+ 69  SHORT      61525.48      62802.41     TRAIL    -1256.34    -0.816    53.1  FLIP_RETEST       
+ 70  SHORT      65114.15      62802.41     TRAIL    +2531.85    +1.656    48.7  ZONE_REJECT       
+ 71   LONG      63439.76      62789.85     TRAIL    -1159.16    -0.745    47.4  ZONE_REJECT       
+ 72   LONG      64107.96      63826.26     TRAIL     -305.57    -0.199    53.0  ZONE_REJECT       
+ 73  SHORT      79666.70      63839.03     TRAIL    +8989.06    +5.855    45.5  ZONE_REJECT       
+ 74   LONG      78220.66      77848.34     TRAIL     -466.49    -0.286    56.2  ZONE_REJECT       
+ 75   LONG      78114.38      77848.34     TRAIL     -305.11    -0.188    55.2  ZONE_REJECT       
