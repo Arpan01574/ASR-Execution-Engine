@@ -1,0 +1,282 @@
+{
+  "BTC_USDT_1m": {
+    "status": "done",
+    "elapsed_s": 130.0,
+    "completed_at": "2026-10-03T17:53:26.312255"
+  },
+  "BTC_USDT_5m": {
+    "status": "done",
+    "elapsed_s": 26.2,
+    "completed_at": "2026-10-03T17:53:52.972852"
+  },
+  "BTC_USDT_15m": {
+    "status": "done",
+    "elapsed_s": 9.3,
+    "completed_at": "2026-10-03T17:54:02.689856"
+  },
+  "BTC_USDT_1h": {
+    "status": "done",
+    "elapsed_s": 2.5,
+    "completed_at": "2026-10-03T17:54:05.706446"
+  },
+  "BTC_USDT_4h": {
+    "status": "done",
+    "elapsed_s": 0.7,
+    "completed_at": "2026-10-03T17:54:06.840966"
+  },
+  "BTC_USDT_1d": {
+    "status": "done",
+    "elapsed_s": 0.1,
+    "completed_at": "2026-10-03T17:54:07.314822"
+  },
+  "ETH_USDT_1m": {
+    "status": "done",
+    "elapsed_s": 134.2,
+    "completed_at": "2026-10-03T17:56:21.959276"
+  },
+  "ETH_USDT_5m": {
+    "status": "done",
+    "elapsed_s": 27.4,
+    "completed_at": "2026-10-03T17:56:49.772839"
+  },
+  "ETH_USDT_15m": {
+    "status": "done",
+    "elapsed_s": 10.5,
+    "completed_at": "2026-10-03T17:57:00.683208"
+  },
+  "ETH_USDT_1h": {
+    "status": "done",
+    "elapsed_s": 3.0,
+    "completed_at": "2026-10-03T17:57:04.180773"
+  },
+  "ETH_USDT_4h": {
+    "status": "done",
+    "elapsed_s": 0.7,
+    "completed_at": "2026-10-03T17:57:05.328713"
+  },
+  "ETH_USDT_1d": {
+    "status": "done",
+    "elapsed_s": 0.1,
+    "completed_at": "2026-10-03T17:57:05.902821"
+  },
+  "SOL_USDT_1m": {
+    "status": "done",
+    "elapsed_s": 127.6,
+    "completed_at": "2026-10-03T17:59:13.959796"
+  },
+  "SOL_USDT_5m": {
+    "status": "done",
+    "elapsed_s": 26.6,
+    "completed_at": "2026-10-03T17:59:41.002449"
+  },
+  "SOL_USDT_15m": {
+    "status": "done",
+    "elapsed_s": 9.5,
+    "completed_at": "2026-10-03T17:59:51.021756"
+  },
+  "SOL_USDT_1h": {
+    "status": "done",
+    "elapsed_s": 2.6,
+    "completed_at": "2026-10-03T17:59:54.103202"
+  },
+  "SOL_USDT_4h": {
+    "status": "done",
+    "elapsed_s": 0.6,
+    "completed_at": "2026-10-03T17:59:55.088113"
+  },
+  "SOL_USDT_1d": {
+    "status": "done",
+    "elapsed_s": 0.1,
+    "completed_at": "2026-10-03T17:59:55.559588"
+  },
+  "XRP_USDT_1m": {
+    "status": "done",
+    "elapsed_s": 126.0,
+    "completed_at": "2026-10-03T18:02:01.965702"
+  },
+  "XRP_USDT_5m": {
+    "status": "done",
+    "elapsed_s": 25.8,
+    "completed_at": "2026-10-03T18:02:28.251938"
+  },
+  "XRP_USDT_15m": {
+    "status": "done",
+    "elapsed_s": 9.5,
+    "completed_at": "2026-10-03T18:02:38.221076"
+  },
+  "XRP_USDT_1h": {
+    "status": "done",
+    "elapsed_s": 2.4,
+    "completed_at": "2026-10-03T18:02:41.040513"
+  },
+  "XRP_USDT_4h": {
+    "status": "done",
+    "elapsed_s": 0.6,
+    "completed_at": "2026-10-03T18:02:42.177300"
+  },
+  "XRP_USDT_1d": {
+    "status": "done",
+    "elapsed_s": 0.1,
+    "completed_at": "2026-10-03T18:02:42.700601"
+  },
+  "BNB_USDT_1m": {
+    "status": "done",
+    "elapsed_s": 122.0,
+    "completed_at": "2026-10-03T18:04:45.085142"
+  },
+  "BNB_USDT_5m": {
+    "status": "done",
+    "elapsed_s": 24.7,
+    "completed_at": "2026-10-03T18:05:10.218964"
+  },
+  "BNB_USDT_15m": {
+    "status": "done",
+    "elapsed_s": 8.6,
+    "completed_at": "2026-10-03T18:05:19.327998"
+  },
+  "BNB_USDT_1h": {
+    "status": "done",
+    "elapsed_s": 2.3,
+    "completed_at": "2026-10-03T18:05:22.011545"
+  },
+  "BNB_USDT_4h": {
+    "status": "done",
+    "elapsed_s": 0.6,
+    "completed_at": "2026-10-03T18:05:23.063728"
+  },
+  "BNB_USDT_1d": {
+    "status": "done",
+    "elapsed_s": 0.1,
+    "completed_at": "2026-10-03T18:05:23.610608"
+  },
+  "__PORTFOLIO_COMPLETE__": {
+    "status": "done",
+    "elapsed_s": 8.1,
+    "completed_at": "2026-10-03T18:52:32.441755"
+  },
+  "BTC_USDT_3m": {
+    "status": "done",
+    "elapsed_s": 29.9,
+    "completed_at": "2026-10-03T18:45:29.154927"
+  },
+  "BTC_USDT_10m": {
+    "status": "done",
+    "elapsed_s": 13.0,
+    "completed_at": "2026-10-03T18:45:42.986552"
+  },
+  "BTC_USDT_30m": {
+    "status": "done",
+    "elapsed_s": 3.1,
+    "completed_at": "2026-10-03T18:45:46.996014"
+  },
+  "BTC_USDT_45m": {
+    "status": "done",
+    "elapsed_s": 3.3,
+    "completed_at": "2026-10-03T18:45:51.254271"
+  },
+  "BTC_USDT_2h": {
+    "status": "done",
+    "elapsed_s": 0.9,
+    "completed_at": "2026-10-03T18:45:52.944162"
+  },
+  "ETH_USDT_3m": {
+    "status": "done",
+    "elapsed_s": 37.6,
+    "completed_at": "2026-10-03T18:46:31.435363"
+  },
+  "ETH_USDT_10m": {
+    "status": "done",
+    "elapsed_s": 14.4,
+    "completed_at": "2026-10-03T18:46:46.744951"
+  },
+  "ETH_USDT_30m": {
+    "status": "done",
+    "elapsed_s": 3.7,
+    "completed_at": "2026-10-03T18:46:51.735881"
+  },
+  "ETH_USDT_45m": {
+    "status": "done",
+    "elapsed_s": 3.7,
+    "completed_at": "2026-10-03T18:46:56.329449"
+  },
+  "ETH_USDT_2h": {
+    "status": "done",
+    "elapsed_s": 0.8,
+    "completed_at": "2026-10-03T18:46:58.011328"
+  },
+  "SOL_USDT_3m": {
+    "status": "done",
+    "elapsed_s": 30.7,
+    "completed_at": "2026-10-03T18:48:18.178211"
+  },
+  "SOL_USDT_10m": {
+    "status": "done",
+    "elapsed_s": 14.4,
+    "completed_at": "2026-10-03T18:48:33.471017"
+  },
+  "SOL_USDT_30m": {
+    "status": "done",
+    "elapsed_s": 3.3,
+    "completed_at": "2026-10-03T18:48:37.718961"
+  },
+  "SOL_USDT_45m": {
+    "status": "done",
+    "elapsed_s": 3.2,
+    "completed_at": "2026-10-03T18:48:41.860872"
+  },
+  "SOL_USDT_2h": {
+    "status": "done",
+    "elapsed_s": 0.8,
+    "completed_at": "2026-10-03T18:48:43.467742"
+  },
+  "XRP_USDT_3m": {
+    "status": "done",
+    "elapsed_s": 28.2,
+    "completed_at": "2026-10-03T18:49:12.504409"
+  },
+  "XRP_USDT_10m": {
+    "status": "done",
+    "elapsed_s": 14.3,
+    "completed_at": "2026-10-03T18:49:27.671427"
+  },
+  "XRP_USDT_30m": {
+    "status": "done",
+    "elapsed_s": 3.2,
+    "completed_at": "2026-10-03T18:49:31.863176"
+  },
+  "XRP_USDT_45m": {
+    "status": "done",
+    "elapsed_s": 3.3,
+    "completed_at": "2026-10-03T18:49:36.119714"
+  },
+  "XRP_USDT_2h": {
+    "status": "done",
+    "elapsed_s": 0.8,
+    "completed_at": "2026-10-03T18:49:37.747508"
+  },
+  "BNB_USDT_3m": {
+    "status": "done",
+    "elapsed_s": 26.8,
+    "completed_at": "2026-10-03T18:50:05.359343"
+  },
+  "BNB_USDT_10m": {
+    "status": "done",
+    "elapsed_s": 12.9,
+    "completed_at": "2026-10-03T18:50:19.194087"
+  },
+  "BNB_USDT_30m": {
+    "status": "done",
+    "elapsed_s": 2.9,
+    "completed_at": "2026-10-03T18:50:22.885457"
+  },
+  "BNB_USDT_45m": {
+    "status": "done",
+    "elapsed_s": 3.0,
+    "completed_at": "2026-10-03T18:50:26.712323"
+  },
+  "BNB_USDT_2h": {
+    "status": "done",
+    "elapsed_s": 0.7,
+    "completed_at": "2026-10-03T18:50:28.382766"
+  }
+}
