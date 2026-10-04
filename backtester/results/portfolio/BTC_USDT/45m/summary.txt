@@ -1,0 +1,13 @@
+ASR Engine v3 — BTC_USDT_45m Backtest Summary
+==================================================
+Trades:      368
+Expectancy:  0.4191 R
+Win Rate:    58.0%
+Profit Fac:  4.61
+Start:       $10,000
+Final:       $21,503
+PnL:         $+11,503
+Return:      +115.03%
+Max DD:      2.75%
+Sharpe ($):  6.603
+CAGR:        0.00%
