@@ -1,0 +1,153 @@
+# ASR Engine v3 — Default Configuration
+# This file mirrors all Pine Script inputs for the canonical Python backtester
+
+core:
+  lookback_limit: 3000
+  invalidation: "close"       # "close" or "wick"
+  use_htf: true
+  htf_timeframe: "4h"
+  htf_pivot_len: 5
+  htf_tol_atr: 0.35
+  asset_override: "Auto"      # Auto, CRYPTO, GOLD, SILVER, FOREX, INDEX, ENERGY, MACRO, OTHER
+  market_override: "Auto"     # Auto, SPOT, PERPETUAL, FUTURES, FOREX, CFD, OTHER
+
+zone_quality:
+  momentum_body_mult: 0.5
+  momentum_count: 2
+  max_zone_size_atr: 1.8
+  merge_overlap: true
+  min_zone_duration: 3
+  merge_atr_frac: 0.3
+  decay_factor: 800
+  displacement_mult: 1.5
+
+pivots:
+  piv_l: 12
+  piv_r: 12
+  n_piv: 10
+  atr_len: 20
+  zone_mult: 0.5
+  max_pct: 4.0
+  flip_zones: true
+
+volume:
+  vol_sma_len: 20
+  vol_surge_thresh: 20.0
+
+signal:
+  enable: true
+  allow_long: true
+  allow_short: true
+  min_tier: "None"            # "Strong" or "Elite"
+  min_score: 45
+  min_wick: 0.20
+  require_direction: false
+  require_volume: false
+  max_sig_per_zone: 2
+  cooldown_bars: 4
+  max_sig_per_day: 4
+  trend_mode: "Soft"             # "Off", "Soft", "Hard"
+  trend_tf: "4h"
+  trend_ema_len: 50
+  session: "0000-2359"
+  skip_weekends: false
+  # Setup type toggles
+  enable_zone_reject: true
+  enable_flip_retest: true
+  enable_sweep_reclaim: true
+  enable_displacement_retest: true
+  enable_bos_retest: true
+
+risk:
+  sl_buffer_atr: 0.50
+  max_risk_atr: 2.5
+  tp1_r: 1.5
+  tp2_r: 3.0
+  tp1_frac: 0.33               # fraction (0-1), not percent
+  tp2_frac: 0.33               # fraction for TP2
+  trail_atr: 1.5               # trailing stop distance for remainder
+  min_room_r: 1.0
+  time_stop_bars: 60
+  fee_pct: 0.04                 # per side
+  slippage_pct: 0.02            # per side
+  max_cost_r: 0.15
+  risk_pct_equity: 0.5
+  signal_ttl_mult: 2.0
+
+structure:
+  swing_len: 5
+  bos_atr_mult: 0.1
+
+liquidity:
+  eq_tolerance_atr: 0.15
+  sweep_min_atr: 0.05
+  reclaim_bars: 3
+
+regime:
+  atr_percentile_window: 500
+  vol_hi_pct: 75.0
+  vol_lo_pct: 25.0
+  trend_flat_band_atr: 0.25
+
+# Asset auto-tune matrices (applied when asset_override == "Auto")
+auto_tune:
+  CRYPTO:
+    decay_factor: 500
+    momentum_body_mult: 0.50
+    n_piv: 8
+    zone_spacing: 0.30
+  GOLD:
+    decay_factor: 600
+    n_piv: 8
+  SILVER:
+    decay_factor: 650
+    momentum_body_mult: 0.45
+    n_piv: 8
+  FOREX:
+    decay_factor: 900
+    momentum_body_mult: 0.40
+    zone_spacing: 0.50
+  INDEX:
+    momentum_body_mult: 0.45
+  ENERGY:
+    decay_factor: 800
+    momentum_body_mult: 0.45
+
+# Backtest-specific settings
+backtest:
+  initial_capital: 10000.0
+  risk_per_trade_pct: 0.5       # % of equity
+  max_concurrent_trades: 1
+  commission_pct: 0.04          # per side
+  slippage_pct: 0.02            # per side
+
+# Walk-forward settings
+walk_forward:
+  train_ratio: 0.6
+  validation_ratio: 0.2
+  test_ratio: 0.2
+  param_grid:
+    sigMinScore: [45, 50, 55, 60, 65]
+    tp1R: [0.8, 1.0, 1.2, 1.5]
+    tp2R: [1.8, 2.0, 2.5, 3.0]
+    slBufferATR: [0.15, 0.20, 0.25, 0.30]
+    minRoomR: [1.5, 2.0, 2.5]
+    pivL: [8, 10, 12, 15]
+    pivR: [8, 10, 12, 15]
+    trendMode: ["Off", "Soft", "Hard"]
+
+# Monte Carlo settings
+monte_carlo:
+  n_simulations: 10000
+  risk_per_trade: 0.005         # 0.5% of equity
+  slippage_variations: [0.01, 0.02, 0.03, 0.05]
+  entry_delay_bars: [0, 1, 2]
+
+# Acceptance thresholds (defined BEFORE reviewing results)
+acceptance:
+  min_trades: 300
+  min_expectancy_r: 0.05
+  max_dd_r: 25.0
+  min_profit_factor: 1.15
+  max_param_sensitivity: 0.3    # max allowed change when parameter shifts by 1 step
+  min_oos_stability: 0.7        # OOS perf / IS perf ratio
