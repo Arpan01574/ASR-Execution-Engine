@@ -1,0 +1,13 @@
+ASR Engine v3 — XRP_USDT_1m Backtest Summary
+==================================================
+Trades:      188
+Expectancy:  1.2709 R
+Win Rate:    56.4%
+Profit Fac:  11.67
+Start:       $10,000
+Final:       $32,427
+PnL:         $+22,427
+Return:      +224.27%
+Max DD:      1.24%
+Sharpe ($):  7.188
+CAGR:        0.00%
