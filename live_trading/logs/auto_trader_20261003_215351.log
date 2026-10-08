@@ -1,0 +1,494 @@
+2026-10-03 21:53:51,945 | INFO     | AutoTrader           | Loaded 10 trading slots | Total capital: $10,000.00
+2026-10-03 21:53:51,951 | INFO     | AutoTrader           | 🔧 Connected to Binance TESTNET (demo mode)
+2026-10-03 21:53:52,884 | INFO     | AutoTrader           | ✅ Markets loaded: 740 pairs available
+2026-10-03 21:53:52,938 | WARNING  | AutoTrader           | Could not fetch balance: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:53:52,947 | INFO     | AutoTrader           | 🚀 Auto Trader STARTED | 10 slots | Cycle interval: 20s
+2026-10-03 21:53:52,947 | INFO     | AutoTrader           | ============================================================
+2026-10-03 21:53:52,947 | INFO     | AutoTrader           | --- Cycle 1 ---
+2026-10-03 21:53:55,799 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:53:57,805 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:54:00,379 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:54:20,396 | INFO     | AutoTrader           | --- Cycle 2 ---
+2026-10-03 21:54:23,218 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:54:25,138 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:54:27,922 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:54:47,938 | INFO     | AutoTrader           | --- Cycle 3 ---
+2026-10-03 21:54:50,941 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:54:52,926 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:54:55,537 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:55:15,545 | INFO     | AutoTrader           | --- Cycle 4 ---
+2026-10-03 21:55:18,387 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:55:20,430 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:55:22,991 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:55:43,002 | INFO     | AutoTrader           | --- Cycle 5 ---
+2026-10-03 21:55:45,969 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:55:47,884 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:55:50,546 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:56:10,564 | INFO     | AutoTrader           | --- Cycle 6 ---
+2026-10-03 21:56:13,409 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:56:15,375 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:56:17,934 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:56:37,950 | INFO     | AutoTrader           | --- Cycle 7 ---
+2026-10-03 21:56:40,729 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:56:42,681 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:56:45,401 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:57:05,417 | INFO     | AutoTrader           | --- Cycle 8 ---
+2026-10-03 21:57:08,294 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:57:10,232 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:57:12,984 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:57:32,996 | INFO     | AutoTrader           | --- Cycle 9 ---
+2026-10-03 21:57:35,873 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:57:37,854 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:57:40,439 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:58:00,457 | INFO     | AutoTrader           | --- Cycle 10 ---
+2026-10-03 21:58:03,712 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:58:05,755 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:58:08,330 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:58:28,352 | INFO     | AutoTrader           | --- Cycle 11 ---
+2026-10-03 21:58:31,247 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:58:33,194 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:58:35,794 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:58:55,809 | INFO     | AutoTrader           | --- Cycle 12 ---
+2026-10-03 21:58:58,686 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:59:00,771 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:59:03,359 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:59:23,364 | INFO     | AutoTrader           | --- Cycle 13 ---
+2026-10-03 21:59:26,330 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:59:28,287 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:59:30,889 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:59:50,904 | INFO     | AutoTrader           | --- Cycle 14 ---
+2026-10-03 21:59:54,215 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:59:56,416 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 21:59:59,036 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:00:19,045 | INFO     | AutoTrader           | --- Cycle 15 ---
+2026-10-03 22:00:21,966 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:00:23,911 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:00:26,992 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:00:47,009 | INFO     | AutoTrader           | --- Cycle 16 ---
+2026-10-03 22:00:49,991 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:00:51,967 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:00:54,526 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:01:14,545 | INFO     | AutoTrader           | --- Cycle 17 ---
+2026-10-03 22:01:17,451 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:01:19,410 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:01:22,030 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:01:42,042 | INFO     | AutoTrader           | --- Cycle 18 ---
+2026-10-03 22:01:44,950 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:01:47,105 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:01:49,701 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:02:09,722 | INFO     | AutoTrader           | --- Cycle 19 ---
+2026-10-03 22:02:12,617 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:02:14,544 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:02:17,117 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:02:37,124 | INFO     | AutoTrader           | --- Cycle 20 ---
+2026-10-03 22:02:39,964 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:02:41,927 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:02:44,476 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:03:04,490 | INFO     | AutoTrader           | --- Cycle 21 ---
+2026-10-03 22:03:07,403 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:03:09,426 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:03:12,051 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:03:32,068 | INFO     | AutoTrader           | --- Cycle 22 ---
+2026-10-03 22:03:34,889 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:03:36,954 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:03:39,540 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:03:59,547 | INFO     | AutoTrader           | --- Cycle 23 ---
+2026-10-03 22:04:02,312 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:04:04,250 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:04:06,853 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:04:26,873 | INFO     | AutoTrader           | --- Cycle 24 ---
+2026-10-03 22:04:30,075 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:04:32,008 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:04:34,601 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:04:54,623 | INFO     | AutoTrader           | --- Cycle 25 ---
+2026-10-03 22:04:57,453 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:04:59,430 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:05:01,997 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:05:22,003 | INFO     | AutoTrader           | --- Cycle 26 ---
+2026-10-03 22:05:24,794 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:05:26,763 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:05:29,339 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:05:49,346 | INFO     | AutoTrader           | --- Cycle 27 ---
+2026-10-03 22:05:52,515 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:05:54,514 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:05:57,461 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:06:17,476 | INFO     | AutoTrader           | --- Cycle 28 ---
+2026-10-03 22:06:20,579 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:06:22,607 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:06:25,240 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:06:45,242 | INFO     | AutoTrader           | --- Cycle 29 ---
+2026-10-03 22:06:48,506 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:06:50,537 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:06:53,167 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:07:13,173 | INFO     | AutoTrader           | --- Cycle 30 ---
+2026-10-03 22:07:16,418 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:07:18,425 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:07:21,192 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:07:41,204 | INFO     | AutoTrader           | --- Cycle 31 ---
+2026-10-03 22:07:44,118 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:07:46,130 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:07:48,758 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:08:08,767 | INFO     | AutoTrader           | --- Cycle 32 ---
+2026-10-03 22:08:11,734 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:08:14,281 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:08:16,890 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:08:36,901 | INFO     | AutoTrader           | --- Cycle 33 ---
+2026-10-03 22:08:39,851 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:08:41,897 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:08:44,648 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:09:04,671 | INFO     | AutoTrader           | --- Cycle 34 ---
+2026-10-03 22:09:07,737 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:09:10,016 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:09:12,612 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:09:32,628 | INFO     | AutoTrader           | --- Cycle 35 ---
+2026-10-03 22:09:35,644 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:09:37,635 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:09:40,322 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:10:00,342 | INFO     | AutoTrader           | --- Cycle 36 ---
+2026-10-03 22:10:03,427 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:10:05,369 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:10:07,928 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:10:27,939 | INFO     | AutoTrader           | --- Cycle 37 ---
+2026-10-03 22:10:30,733 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:10:32,654 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:10:35,612 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:10:55,617 | INFO     | AutoTrader           | --- Cycle 38 ---
+2026-10-03 22:10:58,478 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:11:00,469 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:11:03,075 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:11:23,082 | INFO     | AutoTrader           | --- Cycle 39 ---
+2026-10-03 22:11:25,934 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:11:27,919 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:11:30,628 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:11:50,640 | INFO     | AutoTrader           | --- Cycle 40 ---
+2026-10-03 22:11:53,627 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:11:55,610 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:11:58,173 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:12:18,176 | INFO     | AutoTrader           | --- Cycle 41 ---
+2026-10-03 22:12:20,991 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:12:23,091 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:12:25,683 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:12:45,689 | INFO     | AutoTrader           | --- Cycle 42 ---
+2026-10-03 22:12:48,749 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:12:50,710 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:12:53,332 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:13:13,347 | INFO     | AutoTrader           | --- Cycle 43 ---
+2026-10-03 22:13:16,281 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:13:18,379 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:13:20,936 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:13:40,955 | INFO     | AutoTrader           | --- Cycle 44 ---
+2026-10-03 22:13:43,776 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:13:45,941 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:13:48,607 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:14:08,613 | INFO     | AutoTrader           | --- Cycle 45 ---
+2026-10-03 22:14:11,548 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:14:13,486 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:14:16,060 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:14:36,072 | INFO     | AutoTrader           | --- Cycle 46 ---
+2026-10-03 22:14:38,912 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:14:40,863 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:14:43,458 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:15:03,463 | INFO     | AutoTrader           | --- Cycle 47 ---
+2026-10-03 22:15:06,268 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:15:08,295 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:15:10,867 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:15:30,888 | INFO     | AutoTrader           | --- Cycle 48 ---
+2026-10-03 22:15:33,743 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:15:35,730 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:15:38,319 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:15:58,325 | INFO     | AutoTrader           | --- Cycle 49 ---
+2026-10-03 22:16:01,138 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:16:03,124 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:16:05,921 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:16:25,929 | INFO     | AutoTrader           | --- Cycle 50 ---
+2026-10-03 22:16:29,260 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:16:31,371 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:16:33,948 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:16:53,968 | INFO     | AutoTrader           | --- Cycle 51 ---
+2026-10-03 22:16:56,999 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:16:58,962 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:17:01,562 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:17:21,571 | INFO     | AutoTrader           | --- Cycle 52 ---
+2026-10-03 22:17:24,379 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:17:26,318 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:17:28,875 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:17:48,888 | INFO     | AutoTrader           | --- Cycle 53 ---
+2026-10-03 22:17:51,804 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:17:53,800 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:17:56,363 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:18:16,380 | INFO     | AutoTrader           | --- Cycle 54 ---
+2026-10-03 22:18:19,209 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:18:21,149 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:18:23,716 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:18:43,722 | INFO     | AutoTrader           | --- Cycle 55 ---
+2026-10-03 22:18:46,529 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:18:48,603 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:18:51,167 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:19:11,187 | INFO     | AutoTrader           | --- Cycle 56 ---
+2026-10-03 22:19:14,057 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:19:16,068 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:19:18,758 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:19:38,766 | INFO     | AutoTrader           | --- Cycle 57 ---
+2026-10-03 22:19:41,894 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:19:43,831 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:19:46,398 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:20:06,412 | INFO     | AutoTrader           | --- Cycle 58 ---
+2026-10-03 22:20:09,265 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:20:11,245 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:20:13,896 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:20:33,923 | INFO     | AutoTrader           | --- Cycle 59 ---
+2026-10-03 22:20:36,971 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:20:38,915 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:20:41,767 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:21:01,781 | INFO     | AutoTrader           | --- Cycle 60 ---
+2026-10-03 22:21:04,776 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:21:06,709 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:21:09,245 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:21:29,257 | INFO     | AutoTrader           | --- Cycle 61 ---
+2026-10-03 22:21:32,168 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:21:34,148 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:21:36,787 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:21:56,809 | INFO     | AutoTrader           | --- Cycle 62 ---
+2026-10-03 22:21:59,647 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:22:01,649 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:22:04,292 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:22:24,300 | INFO     | AutoTrader           | --- Cycle 63 ---
+2026-10-03 22:22:27,191 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:22:29,133 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:22:31,721 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:22:51,729 | INFO     | AutoTrader           | --- Cycle 64 ---
+2026-10-03 22:22:54,667 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:22:57,053 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:22:59,647 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:23:19,655 | INFO     | AutoTrader           | --- Cycle 65 ---
+2026-10-03 22:23:22,678 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:23:24,733 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:23:27,752 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:23:47,762 | INFO     | AutoTrader           | --- Cycle 66 ---
+2026-10-03 22:23:50,872 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:23:52,839 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:23:55,740 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:24:15,764 | INFO     | AutoTrader           | --- Cycle 67 ---
+2026-10-03 22:24:18,654 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:24:20,598 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:24:23,168 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:24:43,172 | INFO     | AutoTrader           | --- Cycle 68 ---
+2026-10-03 22:24:47,083 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:24:49,530 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:24:52,391 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:25:12,395 | INFO     | AutoTrader           | --- Cycle 69 ---
+2026-10-03 22:25:15,486 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:25:17,454 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:25:20,149 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:25:40,160 | INFO     | AutoTrader           | --- Cycle 70 ---
+2026-10-03 22:25:43,454 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:25:45,394 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:25:48,119 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:26:08,127 | INFO     | AutoTrader           | --- Cycle 71 ---
+2026-10-03 22:26:11,226 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:26:13,205 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:26:15,856 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:26:35,869 | INFO     | AutoTrader           | --- Cycle 72 ---
+2026-10-03 22:26:38,868 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:26:40,941 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:26:43,950 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:27:03,963 | INFO     | AutoTrader           | --- Cycle 73 ---
+2026-10-03 22:27:06,773 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:27:08,895 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:27:11,809 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:27:31,827 | INFO     | AutoTrader           | --- Cycle 74 ---
+2026-10-03 22:27:34,974 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:27:36,980 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:27:39,538 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:27:59,544 | INFO     | AutoTrader           | --- Cycle 75 ---
+2026-10-03 22:28:02,613 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:28:04,603 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:28:07,257 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:28:27,275 | INFO     | AutoTrader           | --- Cycle 76 ---
+2026-10-03 22:28:30,929 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:28:33,055 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:28:35,658 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:28:55,664 | INFO     | AutoTrader           | --- Cycle 77 ---
+2026-10-03 22:28:58,504 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:29:00,512 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:29:03,296 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:29:23,303 | INFO     | AutoTrader           | --- Cycle 78 ---
+2026-10-03 22:29:26,523 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:29:28,598 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:29:31,335 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:29:51,345 | INFO     | AutoTrader           | --- Cycle 79 ---
+2026-10-03 22:29:54,378 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:29:56,414 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:29:59,135 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:30:19,152 | INFO     | AutoTrader           | --- Cycle 80 ---
+2026-10-03 22:30:22,209 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:30:24,254 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:30:26,876 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:30:46,884 | INFO     | AutoTrader           | --- Cycle 81 ---
+2026-10-03 22:30:49,875 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:30:51,854 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:30:55,058 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:31:15,066 | INFO     | AutoTrader           | --- Cycle 82 ---
+2026-10-03 22:31:18,333 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:31:20,453 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:31:23,051 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:31:43,057 | INFO     | AutoTrader           | --- Cycle 83 ---
+2026-10-03 22:31:45,876 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:31:47,873 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:31:50,566 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:32:10,568 | INFO     | AutoTrader           | --- Cycle 84 ---
+2026-10-03 22:32:13,565 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:32:15,622 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:32:18,301 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:32:38,303 | INFO     | AutoTrader           | --- Cycle 85 ---
+2026-10-03 22:32:41,597 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:32:43,802 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:32:46,426 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:33:06,445 | INFO     | AutoTrader           | --- Cycle 86 ---
+2026-10-03 22:33:10,199 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:33:12,164 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:33:15,300 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:33:35,308 | INFO     | AutoTrader           | --- Cycle 87 ---
+2026-10-03 22:33:38,228 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:33:40,203 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:33:42,815 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:34:02,825 | INFO     | AutoTrader           | --- Cycle 88 ---
+2026-10-03 22:34:05,875 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:34:07,838 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:34:10,509 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:34:30,522 | INFO     | AutoTrader           | --- Cycle 89 ---
+2026-10-03 22:34:33,569 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:34:36,093 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:34:38,728 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:34:58,738 | INFO     | AutoTrader           | --- Cycle 90 ---
+2026-10-03 22:35:02,226 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:35:04,272 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:35:06,879 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:35:26,886 | INFO     | AutoTrader           | --- Cycle 91 ---
+2026-10-03 22:35:29,875 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:35:31,964 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:35:34,671 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:35:54,687 | INFO     | AutoTrader           | --- Cycle 92 ---
+2026-10-03 22:35:57,694 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:36:00,093 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:36:02,818 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:36:22,828 | INFO     | AutoTrader           | --- Cycle 93 ---
+2026-10-03 22:36:25,749 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:36:27,721 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:36:30,496 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:36:50,502 | INFO     | AutoTrader           | --- Cycle 94 ---
+2026-10-03 22:36:53,585 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:36:55,824 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:36:58,493 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:37:18,509 | INFO     | AutoTrader           | --- Cycle 95 ---
+2026-10-03 22:37:21,899 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:37:24,108 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:37:26,782 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:37:46,799 | INFO     | AutoTrader           | --- Cycle 96 ---
+2026-10-03 22:37:49,859 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:37:52,672 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:37:56,933 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:38:16,943 | INFO     | AutoTrader           | --- Cycle 97 ---
+2026-10-03 22:38:19,933 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:38:22,021 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:38:24,619 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:38:44,630 | INFO     | AutoTrader           | --- Cycle 98 ---
+2026-10-03 22:38:47,557 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:38:49,599 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:38:52,258 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:39:12,269 | INFO     | AutoTrader           | --- Cycle 99 ---
+2026-10-03 22:39:15,614 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:39:17,732 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:39:20,375 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:39:40,392 | INFO     | AutoTrader           | --- Cycle 100 ---
+2026-10-03 22:39:44,260 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:39:46,335 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:39:49,351 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:40:09,359 | INFO     | AutoTrader           | --- Cycle 101 ---
+2026-10-03 22:40:12,443 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:40:14,655 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:40:17,355 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:40:37,363 | INFO     | AutoTrader           | --- Cycle 102 ---
+2026-10-03 22:40:40,274 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:40:42,333 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:40:44,909 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:41:04,918 | INFO     | AutoTrader           | --- Cycle 103 ---
+2026-10-03 22:41:07,933 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:41:10,014 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:41:12,702 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:41:32,715 | INFO     | AutoTrader           | --- Cycle 104 ---
+2026-10-03 22:41:35,775 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:41:37,864 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:41:40,452 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:42:00,457 | INFO     | AutoTrader           | --- Cycle 105 ---
+2026-10-03 22:42:03,800 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:42:06,696 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:42:09,409 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:42:29,427 | INFO     | AutoTrader           | --- Cycle 106 ---
+2026-10-03 22:42:33,055 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:42:35,165 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:42:38,036 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:42:58,050 | INFO     | AutoTrader           | --- Cycle 107 ---
+2026-10-03 22:43:00,959 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:43:02,975 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:43:05,583 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:43:25,597 | INFO     | AutoTrader           | --- Cycle 108 ---
+2026-10-03 22:43:28,639 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:43:30,815 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:43:33,521 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:43:53,541 | INFO     | AutoTrader           | --- Cycle 109 ---
+2026-10-03 22:43:56,574 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:43:58,562 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:44:01,534 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:44:21,543 | INFO     | AutoTrader           | --- Cycle 110 ---
+2026-10-03 22:44:24,935 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:44:27,044 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:44:29,688 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:44:49,699 | INFO     | AutoTrader           | --- Cycle 111 ---
+2026-10-03 22:44:52,665 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:44:54,713 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:44:57,334 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:45:17,341 | INFO     | AutoTrader           | --- Cycle 112 ---
+2026-10-03 22:45:21,069 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:45:23,356 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:45:26,049 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:45:46,065 | INFO     | AutoTrader           | --- Cycle 113 ---
+2026-10-03 22:45:49,374 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:45:51,376 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:45:54,472 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:46:14,482 | INFO     | AutoTrader           | --- Cycle 114 ---
+2026-10-03 22:46:17,694 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:46:19,811 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:46:22,483 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:46:42,498 | INFO     | AutoTrader           | --- Cycle 115 ---
+2026-10-03 22:46:46,975 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:46:49,053 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:46:51,748 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:47:11,762 | INFO     | AutoTrader           | --- Cycle 116 ---
+2026-10-03 22:47:14,885 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:47:16,899 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:47:19,499 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:47:39,510 | INFO     | AutoTrader           | --- Cycle 117 ---
+2026-10-03 22:47:42,333 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:47:44,733 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:47:47,748 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:48:07,766 | INFO     | AutoTrader           | --- Cycle 118 ---
+2026-10-03 22:48:10,729 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:48:13,053 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:48:15,787 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:48:35,799 | INFO     | AutoTrader           | --- Cycle 119 ---
+2026-10-03 22:48:38,928 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:48:41,215 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:48:44,097 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:49:04,112 | INFO     | AutoTrader           | --- Cycle 120 ---
+2026-10-03 22:49:07,613 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:49:09,869 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:49:12,564 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:49:32,585 | INFO     | AutoTrader           | --- Cycle 121 ---
+2026-10-03 22:49:35,640 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:49:37,694 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:49:40,406 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:50:00,426 | INFO     | AutoTrader           | --- Cycle 122 ---
+2026-10-03 22:50:03,836 | ERROR    | AutoTrader           | Failed to fetch OHLCV for ETH/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:50:05,854 | ERROR    | AutoTrader           | Failed to fetch OHLCV for XRP/USDT 45m: binanceusdm {"code":-1120,"msg":"Invalid interval."}
+2026-10-03 22:50:08,480 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.

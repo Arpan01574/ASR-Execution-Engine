@@ -1,0 +1,235 @@
+2026-10-03 21:54:24,879 | INFO     | AutoTrader           | Loaded 10 trading slots | Total capital: $10,000.00
+2026-10-03 21:54:24,885 | INFO     | AutoTrader           | 🔧 Connected to Binance TESTNET (demo mode)
+2026-10-03 21:54:25,816 | INFO     | AutoTrader           | ✅ Markets loaded: 740 pairs available
+2026-10-03 21:54:25,857 | WARNING  | AutoTrader           | Could not fetch balance: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:54:25,866 | INFO     | AutoTrader           | 🚀 Auto Trader STARTED | 10 slots | Cycle interval: 20s
+2026-10-03 21:54:25,866 | INFO     | AutoTrader           | ============================================================
+2026-10-03 21:54:25,867 | INFO     | AutoTrader           | --- Cycle 1 ---
+2026-10-03 21:54:34,891 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:54:54,901 | INFO     | AutoTrader           | --- Cycle 2 ---
+2026-10-03 21:55:03,809 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:55:23,822 | INFO     | AutoTrader           | --- Cycle 3 ---
+2026-10-03 21:55:36,323 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:55:56,339 | INFO     | AutoTrader           | --- Cycle 4 ---
+2026-10-03 21:56:05,903 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:56:25,908 | INFO     | AutoTrader           | --- Cycle 5 ---
+2026-10-03 21:56:34,660 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:56:54,679 | INFO     | AutoTrader           | --- Cycle 6 ---
+2026-10-03 21:57:03,549 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:57:23,560 | INFO     | AutoTrader           | --- Cycle 7 ---
+2026-10-03 21:57:32,513 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:57:52,535 | INFO     | AutoTrader           | --- Cycle 8 ---
+2026-10-03 21:58:01,610 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:58:21,618 | INFO     | AutoTrader           | --- Cycle 9 ---
+2026-10-03 21:58:31,266 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:58:51,281 | INFO     | AutoTrader           | --- Cycle 10 ---
+2026-10-03 21:59:00,838 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:59:20,846 | INFO     | AutoTrader           | --- Cycle 11 ---
+2026-10-03 21:59:30,117 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 21:59:50,130 | INFO     | AutoTrader           | --- Cycle 12 ---
+2026-10-03 21:59:59,371 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:00:19,392 | INFO     | AutoTrader           | --- Cycle 13 ---
+2026-10-03 22:00:28,338 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:00:48,344 | INFO     | AutoTrader           | --- Cycle 14 ---
+2026-10-03 22:00:57,310 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:01:17,318 | INFO     | AutoTrader           | --- Cycle 15 ---
+2026-10-03 22:01:26,699 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:01:46,708 | INFO     | AutoTrader           | --- Cycle 16 ---
+2026-10-03 22:01:55,799 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:02:15,807 | INFO     | AutoTrader           | --- Cycle 17 ---
+2026-10-03 22:02:25,093 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:02:45,106 | INFO     | AutoTrader           | --- Cycle 18 ---
+2026-10-03 22:02:54,282 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:03:14,304 | INFO     | AutoTrader           | --- Cycle 19 ---
+2026-10-03 22:03:23,804 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:03:43,813 | INFO     | AutoTrader           | --- Cycle 20 ---
+2026-10-03 22:03:53,216 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:04:13,233 | INFO     | AutoTrader           | --- Cycle 21 ---
+2026-10-03 22:04:22,638 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:04:42,655 | INFO     | AutoTrader           | --- Cycle 22 ---
+2026-10-03 22:04:51,573 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:05:11,582 | INFO     | AutoTrader           | --- Cycle 23 ---
+2026-10-03 22:05:21,142 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:05:41,151 | INFO     | AutoTrader           | --- Cycle 24 ---
+2026-10-03 22:05:50,398 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:06:10,411 | INFO     | AutoTrader           | --- Cycle 25 ---
+2026-10-03 22:06:19,424 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:06:39,429 | INFO     | AutoTrader           | --- Cycle 26 ---
+2026-10-03 22:06:48,578 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:07:08,589 | INFO     | AutoTrader           | --- Cycle 27 ---
+2026-10-03 22:07:17,870 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:07:37,892 | INFO     | AutoTrader           | --- Cycle 28 ---
+2026-10-03 22:07:47,476 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:08:07,491 | INFO     | AutoTrader           | --- Cycle 29 ---
+2026-10-03 22:08:16,890 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:08:36,901 | INFO     | AutoTrader           | --- Cycle 30 ---
+2026-10-03 22:08:46,207 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:09:06,227 | INFO     | AutoTrader           | --- Cycle 31 ---
+2026-10-03 22:09:15,431 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:09:35,445 | INFO     | AutoTrader           | --- Cycle 32 ---
+2026-10-03 22:09:44,718 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:10:04,724 | INFO     | AutoTrader           | --- Cycle 33 ---
+2026-10-03 22:10:13,709 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:10:33,716 | INFO     | AutoTrader           | --- Cycle 34 ---
+2026-10-03 22:10:42,650 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:11:02,658 | INFO     | AutoTrader           | --- Cycle 35 ---
+2026-10-03 22:11:12,263 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:11:32,273 | INFO     | AutoTrader           | --- Cycle 36 ---
+2026-10-03 22:11:41,184 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:12:01,196 | INFO     | AutoTrader           | --- Cycle 37 ---
+2026-10-03 22:12:10,372 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:12:30,391 | INFO     | AutoTrader           | --- Cycle 38 ---
+2026-10-03 22:12:39,818 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:12:59,834 | INFO     | AutoTrader           | --- Cycle 39 ---
+2026-10-03 22:13:09,126 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:13:29,146 | INFO     | AutoTrader           | --- Cycle 40 ---
+2026-10-03 22:13:38,227 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:13:58,237 | INFO     | AutoTrader           | --- Cycle 41 ---
+2026-10-03 22:14:07,421 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:14:27,433 | INFO     | AutoTrader           | --- Cycle 42 ---
+2026-10-03 22:14:40,048 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:15:00,067 | INFO     | AutoTrader           | --- Cycle 43 ---
+2026-10-03 22:15:09,065 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:15:29,085 | INFO     | AutoTrader           | --- Cycle 44 ---
+2026-10-03 22:15:38,155 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:15:58,168 | INFO     | AutoTrader           | --- Cycle 45 ---
+2026-10-03 22:16:07,777 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:16:27,795 | INFO     | AutoTrader           | --- Cycle 46 ---
+2026-10-03 22:16:36,756 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:16:56,765 | INFO     | AutoTrader           | --- Cycle 47 ---
+2026-10-03 22:17:05,706 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:17:25,710 | INFO     | AutoTrader           | --- Cycle 48 ---
+2026-10-03 22:17:34,967 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:17:54,982 | INFO     | AutoTrader           | --- Cycle 49 ---
+2026-10-03 22:18:04,424 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:18:24,434 | INFO     | AutoTrader           | --- Cycle 50 ---
+2026-10-03 22:18:33,600 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:18:53,610 | INFO     | AutoTrader           | --- Cycle 51 ---
+2026-10-03 22:19:02,586 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:19:22,602 | INFO     | AutoTrader           | --- Cycle 52 ---
+2026-10-03 22:19:31,989 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:19:51,998 | INFO     | AutoTrader           | --- Cycle 53 ---
+2026-10-03 22:20:01,111 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:20:21,124 | INFO     | AutoTrader           | --- Cycle 54 ---
+2026-10-03 22:20:30,500 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:20:50,507 | INFO     | AutoTrader           | --- Cycle 55 ---
+2026-10-03 22:20:59,707 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:21:19,719 | INFO     | AutoTrader           | --- Cycle 56 ---
+2026-10-03 22:21:28,882 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:21:48,893 | INFO     | AutoTrader           | --- Cycle 57 ---
+2026-10-03 22:21:58,068 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:22:18,078 | INFO     | AutoTrader           | --- Cycle 58 ---
+2026-10-03 22:22:27,563 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:22:47,569 | INFO     | AutoTrader           | --- Cycle 59 ---
+2026-10-03 22:22:57,644 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:23:17,648 | INFO     | AutoTrader           | --- Cycle 60 ---
+2026-10-03 22:23:26,862 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:23:46,874 | INFO     | AutoTrader           | --- Cycle 61 ---
+2026-10-03 22:23:56,037 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:24:16,051 | INFO     | AutoTrader           | --- Cycle 62 ---
+2026-10-03 22:24:25,238 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:24:45,245 | INFO     | AutoTrader           | --- Cycle 63 ---
+2026-10-03 22:24:55,250 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:25:15,256 | INFO     | AutoTrader           | --- Cycle 64 ---
+2026-10-03 22:25:24,872 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:25:44,883 | INFO     | AutoTrader           | --- Cycle 65 ---
+2026-10-03 22:25:54,523 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:26:14,540 | INFO     | AutoTrader           | --- Cycle 66 ---
+2026-10-03 22:26:23,928 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:26:43,949 | INFO     | AutoTrader           | --- Cycle 67 ---
+2026-10-03 22:26:53,082 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:27:13,091 | INFO     | AutoTrader           | --- Cycle 68 ---
+2026-10-03 22:27:22,367 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:27:42,380 | INFO     | AutoTrader           | --- Cycle 69 ---
+2026-10-03 22:27:51,659 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:28:11,664 | INFO     | AutoTrader           | --- Cycle 70 ---
+2026-10-03 22:28:20,722 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:28:40,729 | INFO     | AutoTrader           | --- Cycle 71 ---
+2026-10-03 22:28:50,608 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:29:10,621 | INFO     | AutoTrader           | --- Cycle 72 ---
+2026-10-03 22:29:19,594 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:29:39,610 | INFO     | AutoTrader           | --- Cycle 73 ---
+2026-10-03 22:29:48,750 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:30:08,753 | INFO     | AutoTrader           | --- Cycle 74 ---
+2026-10-03 22:30:18,303 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:30:38,316 | INFO     | AutoTrader           | --- Cycle 75 ---
+2026-10-03 22:30:47,463 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:31:07,478 | INFO     | AutoTrader           | --- Cycle 76 ---
+2026-10-03 22:31:16,781 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:31:36,799 | INFO     | AutoTrader           | --- Cycle 77 ---
+2026-10-03 22:31:46,330 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:32:06,336 | INFO     | AutoTrader           | --- Cycle 78 ---
+2026-10-03 22:32:15,208 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:32:35,221 | INFO     | AutoTrader           | --- Cycle 79 ---
+2026-10-03 22:32:44,482 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:33:04,490 | INFO     | AutoTrader           | --- Cycle 80 ---
+2026-10-03 22:33:14,797 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:33:34,802 | INFO     | AutoTrader           | --- Cycle 81 ---
+2026-10-03 22:33:44,242 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:34:04,255 | INFO     | AutoTrader           | --- Cycle 82 ---
+2026-10-03 22:34:13,542 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:34:33,547 | INFO     | AutoTrader           | --- Cycle 83 ---
+2026-10-03 22:34:43,265 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:35:03,278 | INFO     | AutoTrader           | --- Cycle 84 ---
+2026-10-03 22:35:12,406 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:35:32,414 | INFO     | AutoTrader           | --- Cycle 85 ---
+2026-10-03 22:35:41,664 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:36:01,679 | INFO     | AutoTrader           | --- Cycle 86 ---
+2026-10-03 22:36:10,997 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:36:31,002 | INFO     | AutoTrader           | --- Cycle 87 ---
+2026-10-03 22:36:40,531 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:37:00,543 | INFO     | AutoTrader           | --- Cycle 88 ---
+2026-10-03 22:37:10,108 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:37:30,114 | INFO     | AutoTrader           | --- Cycle 89 ---
+2026-10-03 22:37:39,304 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:37:59,311 | INFO     | AutoTrader           | --- Cycle 90 ---
+2026-10-03 22:38:10,794 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:38:30,805 | INFO     | AutoTrader           | --- Cycle 91 ---
+2026-10-03 22:38:40,139 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:39:00,145 | INFO     | AutoTrader           | --- Cycle 92 ---
+2026-10-03 22:39:09,256 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:39:29,264 | INFO     | AutoTrader           | --- Cycle 93 ---
+2026-10-03 22:39:38,566 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:39:58,575 | INFO     | AutoTrader           | --- Cycle 94 ---
+2026-10-03 22:40:08,221 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:40:28,230 | INFO     | AutoTrader           | --- Cycle 95 ---
+2026-10-03 22:40:38,081 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:40:58,092 | INFO     | AutoTrader           | --- Cycle 96 ---
+2026-10-03 22:41:07,651 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:41:27,670 | INFO     | AutoTrader           | --- Cycle 97 ---
+2026-10-03 22:41:36,754 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:41:56,788 | INFO     | AutoTrader           | --- Cycle 98 ---
+2026-10-03 22:42:08,131 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:42:28,150 | INFO     | AutoTrader           | --- Cycle 99 ---
+2026-10-03 22:42:37,570 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:42:57,588 | INFO     | AutoTrader           | --- Cycle 100 ---
+2026-10-03 22:43:07,154 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:43:27,163 | INFO     | AutoTrader           | --- Cycle 101 ---
+2026-10-03 22:43:36,434 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:43:56,440 | INFO     | AutoTrader           | --- Cycle 102 ---
+2026-10-03 22:44:06,002 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:44:26,009 | INFO     | AutoTrader           | --- Cycle 103 ---
+2026-10-03 22:44:35,580 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:44:55,585 | INFO     | AutoTrader           | --- Cycle 104 ---
+2026-10-03 22:45:04,899 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:45:24,904 | INFO     | AutoTrader           | --- Cycle 105 ---
+2026-10-03 22:45:34,796 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:45:54,801 | INFO     | AutoTrader           | --- Cycle 106 ---
+2026-10-03 22:46:04,540 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:46:24,548 | INFO     | AutoTrader           | --- Cycle 107 ---
+2026-10-03 22:46:34,519 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:46:54,532 | INFO     | AutoTrader           | --- Cycle 108 ---
+2026-10-03 22:47:03,793 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:47:23,807 | INFO     | AutoTrader           | --- Cycle 109 ---
+2026-10-03 22:47:33,360 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:47:53,379 | INFO     | AutoTrader           | --- Cycle 110 ---
+2026-10-03 22:48:02,861 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:48:22,869 | INFO     | AutoTrader           | --- Cycle 111 ---
+2026-10-03 22:48:32,788 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:48:52,804 | INFO     | AutoTrader           | --- Cycle 112 ---
+2026-10-03 22:49:02,152 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:49:22,162 | INFO     | AutoTrader           | --- Cycle 113 ---
+2026-10-03 22:49:31,361 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:49:51,373 | INFO     | AutoTrader           | --- Cycle 114 ---
+2026-10-03 22:50:01,080 | ERROR    | AutoTrader           | Position check error: binanceusdm testnet/sandbox mode is not supported for futures anymore, please check the deprecation announcement https://t.me/ccxt_announcements/92 and consider using the demo trading instead.
+2026-10-03 22:50:21,089 | INFO     | AutoTrader           | --- Cycle 115 ---
