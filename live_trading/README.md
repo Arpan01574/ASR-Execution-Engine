@@ -1,104 +1,118 @@
 # ASR Engine v3 — Live Demo Auto-Trading System
 
+> **Autonomous Execution Layer** — A self-contained, real-time trading engine that fetches market data, generates ASR signals, and manages a multi-slot portfolio on Binance Futures.
+
+---
+
 ## 🚀 Quick Start
 
 ```bash
 # 1. Install dependencies (from project root)
 pip install -e .
 
-# 2. Start the auto-trader
+# 2. Configure environment (ensure .env has Binance Testnet keys)
+# BINANCE_API_KEY=...
+# BINANCE_API_SECRET=...
+# BINANCE_USE_TESTNET=true
+
+# 3. Start the auto-trader
 python -m live_trading.auto_trader
 ```
 
-That's it. The system will:
-- Connect to Binance Testnet using your demo API keys
-- Load the Top 10 portfolio allocation (10 slots × $1,000)
-- Start scanning for ASR signals across all 10 asset+TF combinations
-- Execute trades automatically with full risk management
-- Display a real-time dashboard in your terminal
-- Log all trades to `results/trade_log.csv`
+The system will:
+1. Connect to Binance Testnet using your API keys
+2. Load the Top 10 portfolio allocation (10 slots × $1,000)
+3. Start a continuous loop scanning for ASR signals across all 10 asset+TF combinations
+4. Execute trades automatically with full risk management
+5. Display a real-time dashboard in your terminal
+6. Log all trades to `results/trade_log.csv`
 
 ---
 
 ## 📂 Directory Structure
 
-```
+```text
 live_trading/
 ├── README.md                              ← You are here
 ├── RESULTS.md                             ← Live trading results (auto-updated)
 ├── auto_trader.py                         ← 🔥 Main auto-trading engine
-├── __init__.py                            ← Package init
+├── __init__.py
 │
-├── config/                                ← Configuration
-│   ├── __init__.py
-│   └── portfolio_allocation.yaml          ← Top 10 slot allocation config
+├── config/
+│   └── portfolio_allocation.yaml          ← Top 10 slot allocation configuration
 │
-├── docs/                                  ← Documentation
-│   ├── STRATEGY_GUIDE.md                  ← Full strategy methodology
+├── docs/                                  ← Live trading documentation
+│   ├── STRATEGY_GUIDE.md                  ← Full trading methodology
 │   ├── PORTFOLIO_OVERVIEW.md              ← Portfolio architecture & slot details
-│   └── RISK_FRAMEWORK.md                  ← Multi-layer risk management
+│   └── RISK_FRAMEWORK.md                  ← Multi-layer risk management rules
 │
-├── results/                               ← Trading output (auto-generated)
+├── results/                               ← Output generated during runtime
 │   ├── trade_log.csv                      ← All trades (entries + exits)
 │   ├── portfolio_snapshot.json            ← Latest portfolio state
 │   ├── portfolio_history.jsonl            ← Equity curve data points
 │   └── session_report.json                ← Per-session summary
 │
-└── logs/                                  ← Runtime logs
-    └── auto_trader_YYYYMMDD_HHMMSS.log    ← Detailed execution log
+└── logs/                                  ← Runtime execution logs
+    └── auto_trader_YYYYMMDD_HHMMSS.log    ← Detailed system log
 ```
 
 ---
 
 ## 🏗️ Architecture
 
-```
-┌──────────────────────────────────────────────────────────┐
-│                    PORTFOLIO MANAGER                     │
-│  ┌─────────┐ ┌─────────┐ ┌─────────┐     ┌─────────┐  │
-│  │ Slot 1  │ │ Slot 2  │ │ Slot 3  │ ... │ Slot 10 │  │
-│  │ BNB 1m  │ │ SOL 3m  │ │ XRP 1m  │     │ ETH 1m  │  │
-│  │ $1,000  │ │ $1,000  │ │ $1,000  │     │ $1,000  │  │
-│  └────┬────┘ └────┬────┘ └────┬────┘     └────┬────┘  │
-│       │           │           │               │        │
-│  ┌────▼───────────▼───────────▼───────────────▼────┐  │
-│  │              SIGNAL GENERATOR                    │  │
-│  │  Fetch OHLCV → Pivots → Zones → Wick → Score   │  │
-│  └──────────────────────┬──────────────────────────┘  │
-│                         │ Signals (score ≥ 50)         │
-│  ┌──────────────────────▼──────────────────────────┐  │
-│  │              RISK ENGINE                         │  │
-│  │  Sizing → Circuit Breaker → DD Check → Drift    │  │
-│  └──────────────────────┬──────────────────────────┘  │
-│                         │ Approved Orders              │
-│  ┌──────────────────────▼──────────────────────────┐  │
-│  │          BINANCE TESTNET (ccxt)                  │  │
-│  │  Market Order → SL → TP1 → Monitor → Close     │  │
-│  └─────────────────────────────────────────────────┘  │
-│                                                        │
-│  ┌─────────────────────────────────────────────────┐  │
-│  │              LOGGING & RESULTS                   │  │
-│  │  trade_log.csv │ portfolio_snapshot.json │ logs  │  │
-│  └─────────────────────────────────────────────────┘  │
-└──────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph PortfolioManager ["Portfolio Manager ($10,000)"]
+        S1["Slot 1: BNB 1m<br/>($1,000)"]
+        S2["Slot 2: SOL 3m<br/>($1,000)"]
+        S3["Slots 3-10...<br/>($1,000 each)"]
+    end
+
+    subgraph SignalGenerator ["Signal Generator"]
+        fetch["Fetch OHLCV (ccxt)"]
+        detect["Detect Pivots & Zones"]
+        score["Calculate Score"]
+        fetch --> detect --> score
+    end
+
+    subgraph RiskEngine ["Risk Engine"]
+        size["Position Sizing (0.5%)"]
+        breaker["Circuit Breaker (3 losses)"]
+        dd["Max DD Check (25%)"]
+        size --> breaker --> dd
+    end
+
+    subgraph Execution ["Execution (Binance Testnet)"]
+        market["MARKET Entry"]
+        stop["STOP_MARKET SL"]
+        limit["LIMIT TP1 & TP2"]
+        market --> stop --> limit
+    end
+
+    S1 & S2 & S3 --> SignalGenerator
+    SignalGenerator -->|Score ≥ 50| RiskEngine
+    RiskEngine -->|Approved| Execution
+    Execution --> Logger["Results & Logging"]
 ```
 
 ---
 
 ## 📊 Portfolio Allocation
 
-| Slot | Asset | TF | Margin | Capital | Backtest Score |
-|------|-------|----|--------|---------|---------------|
-| 1 | BNB/USDT | 1m | USDT | $1,000 | 70.5 ⭐ |
-| 2 | SOL/USDT | 3m | USDT | $1,000 | 63.3 |
-| 3 | XRP/USDT | 1m | USDT | $1,000 | 59.9 |
-| 4 | ETH/USDT | 45m | USDT | $1,000 | 59.5 |
-| 5 | BNB/USDT | 4h | USDT | $1,000 | 56.9 |
-| 6 | SOL/USDT | 15m | USDC | $1,000 | 56.1 |
-| 7 | XRP/USDT | 45m | USDC | $1,000 | 55.2 |
-| 8 | XRP/USDT | 30m | USDC | $1,000 | 53.2 |
-| 9 | ETH/USDT | 4h | USDC | $1,000 | 52.6 |
-| 10 | ETH/USDT | 1m | USDC | $1,000 | 51.8 |
+The system trades a diversified portfolio selected from the 55-combination backtest.
+
+| Slot | Asset | TF | Margin | Capital | Score | Expected R | Character |
+|------|-------|----|--------|---------|-------|------------|-----------|
+| 1 | **BNB/USDT** | 1m | USDT | $1,000 | 70.5 ⭐ | 2.73 R | High-frequency scalp |
+| 2 | **SOL/USDT** | 3m | USDT | $1,000 | 63.3 | 1.14 R | Clean signal micro-swing |
+| 3 | **XRP/USDT** | 1m | USDT | $1,000 | 59.9 | 1.27 R | Volatility scalping |
+| 4 | **ETH/USDT** | 45m | USDT | $1,000 | 59.5 | 0.64 R | Balanced swing |
+| 5 | **BNB/USDT** | 4h | USDT | $1,000 | 56.9 | 0.83 R | Multi-day structural |
+| 6 | **SOL/USDT** | 15m | USDC | $1,000 | 56.1 | 0.59 R | High-return intraday |
+| 7 | **XRP/USDT** | 45m | USDC | $1,000 | 55.2 | 0.52 R | Medium-term swing |
+| 8 | **XRP/USDT** | 30m | USDC | $1,000 | 53.2 | 0.52 R | Multi-TF coverage |
+| 9 | **ETH/USDT** | 4h | USDC | $1,000 | 52.6 | 0.73 R | Macro trend plays |
+| 10 | **ETH/USDT** | 1m | USDC | $1,000 | 51.8 | 1.01 R | High volume scalp |
 
 ---
 
@@ -115,29 +129,29 @@ MAX_GLOBAL_DRAWDOWN_PCT=15.0
 ```
 
 ### Portfolio Config (`config/portfolio_allocation.yaml`)
-- Edit slot allocations, capital per slot, risk parameters
-- Add/remove slots as needed
-- Modify risk rules and circuit breaker thresholds
+Control the capital distribution, add/remove slots, and adjust risk parameters without touching code.
 
 ---
 
 ## 🛡️ Risk Management
 
-| Layer | Protection |
-|-------|-----------|
-| **Per-Trade** | 0.5% max risk, structural SL, max 2.5 ATR distance |
-| **Per-Slot** | 3-loss circuit breaker, 25% max DD pause |
-| **Portfolio** | 15% global kill switch, max 10 open positions |
-| **Execution** | Drift guard (0.3%), order FSM, rate limiting |
+| Layer | Protection | Details |
+|-------|-----------|---------|
+| **Per-Trade** | 0.5% max risk | Exact `Decimal` sizing; structural SL; max 2.5 ATR distance |
+| **Per-Slot** | Circuit breakers | Pause for 30m after 3 losses; freeze on >25% slot drawdown |
+| **Portfolio** | Global kill switch | Halt all trading if total portfolio drawdown exceeds 15% |
+| **Execution** | Drift & Rate limits | Max 0.3% price drift from signal; ccxt rate limit handling |
 
-See [docs/RISK_FRAMEWORK.md](docs/RISK_FRAMEWORK.md) for complete details.
+See [`docs/RISK_FRAMEWORK.md`](docs/RISK_FRAMEWORK.md) for a deep dive.
 
 ---
 
 ## 📈 Monitoring
 
-### Terminal Dashboard (auto-refreshes every 5 cycles)
-```
+### Real-Time Terminal Dashboard
+The engine renders a dynamic dashboard in the console, refreshing automatically:
+
+```text
 ================================================================================
   ASR ENGINE v3 — LIVE DEMO TRADING DASHBOARD
 ================================================================================
@@ -157,32 +171,24 @@ See [docs/RISK_FRAMEWORK.md](docs/RISK_FRAMEWORK.md) for complete details.
 ================================================================================
 ```
 
-### Log Files
-- **Runtime log:** `logs/auto_trader_YYYYMMDD_HHMMSS.log`
-- **Trade CSV:** `results/trade_log.csv`
-- **Snapshots:** `results/portfolio_snapshot.json`
-- **Equity history:** `results/portfolio_history.jsonl`
-
 ---
 
 ## 🔧 Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| `ccxt` not found | `pip install ccxt` |
-| API authentication error | Check `.env` keys, ensure testnet keys match |
-| "Markets not loaded" | Exchange rate limit hit, wait and retry |
-| No signals generated | Normal — ASR is selective. Wait for zone tests. |
-| Position size too small | Increase slot capital or reduce risk distance |
-| Circuit breaker triggered | Check logs, review losing streak, resume manually |
+| Issue | Cause & Solution |
+|-------|------------------|
+| `ModuleNotFoundError: No module named 'ccxt'` | Run `pip install -e .` from project root |
+| API Authentication Error | Verify `.env` contains correct Binance **Testnet** keys |
+| "Markets not loaded" | Temporary ccxt rate limit. Wait a moment and retry |
+| No signals generating | Expected behavior. The system only trades high-quality setups |
+| "Position size too small" | Entry-to-SL distance is wide. Requires more capital or wider SL limit |
+| Status: 🛑 PAUSED | Circuit breaker triggered. Check logs, reset manually if desired |
 
 ---
 
 ## 🔗 Related Documentation
 
-- [Strategy Guide](docs/STRATEGY_GUIDE.md) — Full trading methodology
-- [Portfolio Overview](docs/PORTFOLIO_OVERVIEW.md) — Detailed slot analysis  
-- [Risk Framework](docs/RISK_FRAMEWORK.md) — Multi-layer risk management
-- [Results](RESULTS.md) — Live trading performance tracking
-- [Main Project README](../README.md) — Full project overview
-- [Backtest Evidence](../evidence/) — Historical backtest proof
+- [Strategy Guide](docs/STRATEGY_GUIDE.md) — Comprehensive trading methodology
+- [Portfolio Overview](docs/PORTFOLIO_OVERVIEW.md) — Detailed slot analysis and correlation
+- [Risk Framework](docs/RISK_FRAMEWORK.md) — Multi-layer defense architecture
+- [Trading Results](RESULTS.md) — Live performance tracking (auto-updated)

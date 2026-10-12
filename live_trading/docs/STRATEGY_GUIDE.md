@@ -1,193 +1,148 @@
-# ASR Engine v3 — Live Demo Trading Strategy Guide
+# ASR Engine v3 — Live Trading Strategy Guide
+
+> **Core Methodology** — A comprehensive breakdown of the structural price action rules governing the auto-trader's entry, exit, and risk logic.
+
+---
 
 ## 📋 Table of Contents
-- [Strategy Overview](#strategy-overview)
-- [Core Logic](#core-logic)
-- [Entry Conditions](#entry-conditions)
-- [Exit Rules](#exit-rules)
-- [Risk Management](#risk-management)
-- [Portfolio Allocation](#portfolio-allocation)
-- [Timeframe Selection Rationale](#timeframe-selection-rationale)
+
+- [Strategy Overview](#1-strategy-overview)
+- [Core Logic](#2-core-logic)
+- [Entry Conditions](#3-entry-conditions)
+- [Exit Rules](#4-exit-rules)
+- [Risk Management](#5-risk-management)
+- [Timeframe Rationale](#6-timeframe-selection-rationale)
 
 ---
 
-## Strategy Overview
+## 1. Strategy Overview
 
-**Name:** ASR Engine v3 (Advanced Support & Resistance)  
-**Type:** Structural Price Action Trading  
-**Markets:** Crypto Perpetual Futures (Binance USDⓈ-M)  
-**Direction:** Long and Short  
-**Holding Period:** Intrabar (1m scalps) to multi-day (4h swings)  
+| Property | Value |
+|----------|-------|
+| **Name** | ASR Engine v3 (Advanced Support & Resistance) |
+| **Type** | Structural Price Action Trading |
+| **Markets** | Crypto Perpetual Futures (Binance USDⓈ-M) |
+| **Direction** | Long and Short |
+| **Holding Period** | Intrabar (1m scalps) to multi-day (4h swings) |
 
-The ASR Engine identifies high-probability trade setups at key structural levels (supply/demand zones) formed by pivot-based support and resistance. It combines zone detection, price action confirmation (wick rejection), momentum filtering, and trend alignment to generate signals.
+The ASR Engine identifies high-probability trade setups at key structural levels (supply/demand zones) formed by pivot-based support and resistance. It combines zone detection, price action confirmation (wick rejection), momentum filtering, and trend alignment to generate deterministic execution signals.
 
 ---
 
-## Core Logic
+## 2. Core Logic
 
-### 1. Zone Detection (Supply & Demand)
+### 2.1 Zone Detection (Supply & Demand)
+
 ```
-Support Zone = Pivot Low ± 0.5 × ATR(20)
-Resistance Zone = Pivot High ± 0.5 × ATR(20)
+Support Zone (Demand) = Pivot Low ± 0.5 × ATR(20)
+Resistance Zone (Supply) = Pivot High ± 0.5 × ATR(20)
 ```
+
 - Uses 12-bar lookback/lookforward for pivot detection
 - Zones decay over time (800-bar decay factor for crypto)
-- Zones are merged when overlapping within 0.3 × ATR
+- Overlapping zones within 0.3 × ATR are merged dynamically
 
-### 2. Setup Types (5 Canonical)
-| Setup | Description | Weight |
-|-------|-------------|--------|
-| Zone Reject | Price taps zone, wick rejects, closes away | Primary |
-| Flip Retest | Old resistance becomes support (or vice versa) | High |
-| Sweep & Reclaim | Liquidity sweep beyond level, reclaim within 3 bars | High |
-| BOS Retest | Break of Structure, then retest of broken level | Medium |
-| Displacement Retest | Impulsive move creates FVG, then retest | Medium |
+### 2.2 Canonical Setup Types
 
-### 3. Quality Scoring (0-100)
-Each setup receives a composite score:
-- **Base:** 50 points for meeting minimum criteria
-- **Volume Surge:** +15 if volume > 1.5× SMA(20)
-- **Wick Quality:** +10 if rejection wick > 0.3 × ATR
-- **Trend Alignment:** +10 if price > EMA(50) for longs / < EMA(50) for shorts
-- **Zone Tier:** +5/+10 for Strong/Elite zone classification
+| Setup | Description | Signal Weight |
+|-------|-------------|---------------|
+| **Zone Reject** | Price taps zone, wick rejects, closes away | Primary |
+| **Flip Retest** | Old resistance becomes support (or vice versa) | High |
+| **Sweep & Reclaim** | Liquidity sweep beyond level, reclaim within 3 bars | High |
+| **BOS Retest** | Break of Structure, then retest of broken level | Medium |
+| **Displacement Retest** | Impulsive move creates FVG, then retest | Medium |
 
-Minimum score for entry: **50**
+### 2.3 Quality Scoring (0-100)
 
----
+Every valid setup receives a composite score:
+- **Base Score:** 50 points for meeting minimum criteria
+- **Volume Surge:** +15 points if volume > 1.5× SMA(20)
+- **Wick Quality:** +10 points if rejection wick > 0.3 × ATR
+- **Trend Alignment:** +10 points if price > EMA(50) for Longs
+- **Zone Tier:** +5/+10 points for Strong/Elite zone classification
 
-## Entry Conditions
-
-All of these must be TRUE simultaneously:
-
-1. ✅ Price is within a valid supply/demand zone
-2. ✅ Bar shows wick rejection (wick > 50% of body AND wick > 0.15 × ATR)
-3. ✅ Trend alignment (close above/below EMA50)
-4. ✅ Volume above 80% of 20-period SMA
-5. ✅ Risk distance (entry to SL) < 2.5 × ATR
-6. ✅ Score ≥ 50
-7. ✅ No existing position on the same symbol
-8. ✅ Daily trade limit not exceeded (max 4/day/slot)
-9. ✅ Slot not paused (circuit breaker not triggered)
+> **Minimum score required for execution:** **50**
 
 ---
 
-## Exit Rules
+## 3. Entry Conditions
 
-### Stop Loss
-```
-LONG:  SL = Zone Bottom − 0.5 × ATR
-SHORT: SL = Zone Top + 0.5 × ATR
-```
+For an order to be submitted, **ALL** of the following must be true simultaneously at bar close:
 
-### Take Profit (3-Stage)
-| Stage | Target | Position % | 
-|-------|--------|------------|
-| TP1 | Entry + 1.5R | 33% scale-out |
-| TP2 | Entry + 3.0R | 33% scale-out |
-| Trail | 1.5 ATR trailing stop | 34% remainder |
-
-### Time Stop
-- Maximum hold: 60 bars (configurable)
-- Exit at market if no TP hit within time limit
+| # | Check | Condition |
+|---|-------|-----------|
+| 1 | **Zone Interaction** | Price is within a valid, active supply/demand zone |
+| 2 | **Price Action** | Bar shows wick rejection (wick > 50% of body AND wick > 0.15 × ATR) |
+| 3 | **Trend Alignment** | Close is above EMA(50) for Longs, below for Shorts |
+| 4 | **Volume Check** | Volume is above 80% of 20-period SMA |
+| 5 | **Score Check** | Calculated quality score is ≥ 50 |
+| 6 | **Risk Distance** | Distance from Entry to SL is < 2.5 × ATR |
+| 7 | **Position Limit** | No existing open position on the same symbol for this slot |
+| 8 | **Daily Limit** | Maximum 4 trades per day per slot not exceeded |
+| 9 | **Circuit Breaker** | Slot is not in a paused or frozen state |
 
 ---
 
-## Risk Management
+## 4. Exit Rules
 
-### Position Sizing
+The system employs a predefined **3-Stage Fractional Exit Model**:
+
+### 4.1 Stop Loss
+
+Stop losses are **structural**, placed beyond the zone extreme plus a volatility buffer:
+
 ```
-Risk per trade = 0.5% of slot equity
-Position size = Risk Amount / |Entry − Stop|
+LONG SL = Zone Bottom − 0.5 × ATR(20)
+SHORT SL = Zone Top + 0.5 × ATR(20)
 ```
-- Uses `Decimal` arithmetic to prevent rounding up
-- Always rounds DOWN to lot size
-- Checks minimum notional and minimum quantity
 
-### Circuit Breakers
-| Trigger | Action |
-|---------|--------|
-| 3 consecutive losses | Pause slot for 30 minutes |
-| Slot drawdown > 25% | Pause slot indefinitely |
-| Portfolio drawdown > 15% | Global kill switch — all trading stops |
-| Single trade > 3% loss | Flag for review |
+### 4.2 Take Profit (Scale-Out)
 
-### Position Limits
-- Max 1 concurrent position per slot
-- Max 10 concurrent positions globally
-- Max 4 trades per day per slot
+| Stage | Target | Position % | Action |
+|-------|--------|------------|--------|
+| **TP1** | Entry + 1.5 R | 33% | Book partial profit, move SL to Breakeven |
+| **TP2** | Entry + 3.0 R | 33% | Book partial profit, remainder becomes "Runner" |
+| **Runner**| Trailing Stop | 34% | Trails price by 1.5 ATR |
+
+### 4.3 Time Stop
+If a trade has been open for **60 bars** without hitting SL or TP2, the engine closes the entire remaining position at the current market price to free up capital.
 
 ---
 
-## Portfolio Allocation
+## 5. Risk Management
 
-### Capital Structure
-| Pool | Amount | Slots | Per-Slot |
-|------|--------|-------|----------|
-| USDT | $5,000 | 1-5 | $1,000 |
-| USDC | $5,000 | 6-10 | $1,000 |
-| **Total** | **$10,000** | **10** | **$1,000** |
+### 5.1 Position Sizing
 
-### Slot Assignments
+Position sizes are calculated precisely using `Decimal` arithmetic based on distance to the structural stop loss:
 
-#### USDT-Margined (Slots 1-5)
-| Slot | Asset | TF | Score | Expectancy | PF |
-|------|-------|----|-------|------------|-----|
-| 1 | BNB/USDT | 1m | 70.5 | 2.73R | 9.94 |
-| 2 | SOL/USDT | 3m | 63.3 | 1.14R | 13.35 |
-| 3 | XRP/USDT | 1m | 59.9 | 1.27R | 11.67 |
-| 4 | ETH/USDT | 45m | 59.5 | 0.64R | 10.26 |
-| 5 | BNB/USDT | 4h | 56.9 | 0.83R | 9.77 |
+```
+Risk Amount = Slot Equity × 0.005 (0.5%)
+Position Size = ROUND_DOWN(Risk Amount / |Entry − Stop|)
+```
 
-#### USDC-Margined (Slots 6-10)
-| Slot | Asset | TF | Score | Expectancy | PF |
-|------|-------|----|-------|------------|-----|
-| 6 | SOL/USDT | 15m | 56.1 | 0.59R | 8.45 |
-| 7 | XRP/USDT | 45m | 55.2 | 0.52R | 9.15 |
-| 8 | XRP/USDT | 30m | 53.2 | 0.52R | 8.01 |
-| 9 | ETH/USDT | 4h | 52.6 | 0.73R | 9.63 |
-| 10 | ETH/USDT | 1m | 51.8 | 1.01R | 9.25 |
+### 5.2 Defense-in-Depth
+
+| Layer | Trigger | Action |
+|-------|---------|--------|
+| **Execution** | Slippage > 0.3% | Drift Guard rejects entry |
+| **Slot** | 3 consecutive losses | 30-minute cooldown pause |
+| **Slot** | > 25% slot drawdown | Indefinite slot freeze (requires manual review) |
+| **Portfolio** | > 15% global drawdown | Kill switch (halts all trading entirely) |
 
 ---
 
-## Timeframe Selection Rationale
+## 6. Timeframe Selection Rationale
 
-The top 10 were selected by **composite scoring** across 5 metrics from a 55-combination backtest (5 symbols × 11 timeframes, 15,194 total trades):
+The Top 10 slots were selected via composite scoring from the 55-combo backtest (15,194 trades) to achieve high **temporal diversification**:
 
-```
-Composite = 0.30 × Expectancy_norm + 
-            0.25 × ProfitFactor_norm + 
-            0.20 × Sharpe_norm + 
-            0.15 × WinRate_norm + 
-            0.10 × TradeVolume_norm
-```
+| Category | Timeframes | Strategy | Impact on Equity Curve |
+|----------|------------|----------|------------------------|
+| **Scalping** | 1m, 3m | High-frequency | Rapid growth, higher volatility, many trades daily |
+| **Intraday** | 10m, 15m, 30m | Medium-frequency | Smooths daily variance, captures standard sessions |
+| **Swing** | 45m, 4h | Low-frequency | Captures macro trends, low stress, high win rate |
 
-### TF Distribution in Top 10
-- **1m:** 3 slots (BNB, XRP, ETH) — high-frequency scalping
-- **3m:** 1 slot (SOL) — micro-swing
-- **15m:** 1 slot (SOL) — intraday swing
-- **30m:** 1 slot (XRP) — medium swing
-- **45m:** 2 slots (ETH, XRP) — swing
-- **4h:** 2 slots (BNB, ETH) — position/swing
-
-This gives excellent **temporal diversification**: some slots trade many times per day (1m), while others trade a few times per week (4h), smoothing the equity curve.
-
-### Symbol Distribution
-- **ETH:** 3 slots (1m, 45m, 4h) — multi-TF coverage
-- **XRP:** 3 slots (1m, 30m, 45m) — multi-TF coverage
-- **BNB:** 2 slots (1m, 4h) — polar extremes
-- **SOL:** 2 slots (3m, 15m) — fast/medium
+By running these simultaneously across 10 isolated slots, the portfolio achieves a much smoother aggregate equity curve than any single strategy could provide.
 
 ---
 
-## Expected Performance (from Backtest)
-
-| Metric | Portfolio Estimate |
-|--------|-------------------|
-| Avg Expectancy | ~1.0 R per trade |
-| Avg Profit Factor | ~9.9 |
-| Avg Win Rate | ~60.6% |
-| Estimated Monthly Trades | ~200-400 |
-| Risk of Ruin (10K base) | 0.00% |
-| Target Monthly Return | +5-15% |
-
-> ⚠️ **Disclaimer:** Past backtest performance does not guarantee future results. Demo trading is for validation purposes. Always start with small capital and validate on testnet before committing real funds.
+*For detailed slot allocation metrics, refer to [PORTFOLIO_OVERVIEW.md](PORTFOLIO_OVERVIEW.md).*

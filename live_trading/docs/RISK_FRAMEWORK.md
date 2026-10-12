@@ -1,167 +1,113 @@
 # ASR Engine v3 — Risk Management Framework
 
-## Overview
-
-The ASR Engine v3 employs a **multi-layered risk management framework** designed to protect capital at every level: per-trade, per-slot, and portfolio-wide. The system is designed so that **no single failure can cause catastrophic loss**.
+> **Defense in Depth** — The multi-layered risk architecture designed to protect capital. The system guarantees that no single failure (code, exchange, or market) can cause catastrophic loss.
 
 ---
 
-## Layer 1: Per-Trade Risk
+## 📋 The 4-Layer Defense Architecture
 
-### Position Sizing
+```mermaid
+flowchart TD
+    L1["Layer 1: Per-Trade<br/>(Sizing & Stop Loss)"]
+    L2["Layer 2: Per-Slot<br/>(Circuit Breakers)"]
+    L3["Layer 3: Portfolio<br/>(Global Limits)"]
+    L4["Layer 4: Execution<br/>(Drift & FSMs)"]
+    
+    L1 --> L2 --> L3 --> L4
+```
+
+---
+
+## 🛡️ Layer 1: Per-Trade Risk
+
+Risk is strictly capped per individual trade.
+
+### Position Sizing Formula
 ```
 Risk Amount = Slot Equity × 0.5%
-Position Size = Risk Amount / |Entry Price − Stop Loss Price|
+Position Size = ROUND_DOWN(Risk Amount / |Entry Price − Stop Loss Price|)
 ```
 
 **Example (Slot 1: BNB/USDT 1m, $1,000 equity):**
-```
-Risk Amount = $1,000 × 0.005 = $5.00
-Entry = $620.50, SL = $618.00 → Distance = $2.50
-Position Size = $5.00 / $2.50 = 2.0 BNB
-Max Loss on this trade = $5.00 (0.5% of slot equity)
-```
+- Risk Amount = $1,000 × 0.005 = **$5.00**
+- Entry = $620.50, SL = $618.00 → Distance = $2.50
+- Position Size = $5.00 / $2.50 = **2.0 BNB**
+- Max Loss on this trade = $5.00 (0.5% of slot equity)
 
-### Key Constraints
-- **Never** rounds UP position size (uses `ROUND_DOWN`)
-- Checks minimum notional ($5 for Binance)
-- Checks minimum quantity per market
-- Uses `Decimal` arithmetic for precision
-
-### Stop Loss Placement
-```
-LONG SL = Zone Bottom − 0.5 × ATR(20)
-SHORT SL = Zone Top + 0.5 × ATR(20)
-```
-- Stop loss is **structural** — placed beyond the zone + ATR buffer
-- Never moved toward price (only trailing in profit)
-- Maximum risk distance: 2.5 × ATR (wider stops rejected)
+### Hard Constraints
+| Constraint | Implementation | Benefit |
+|------------|----------------|---------|
+| **No Rounding Up** | Uses `Decimal` rounding down | Never risks a penny more than 0.5% |
+| **Max Risk Distance** | Reject if Entry-SL > 2.5 ATR | Prevents buying into extreme volatility |
+| **Structural SL** | Placed beyond zone + ATR buffer | Allows trade to breathe without random stop-outs |
 
 ---
 
-## Layer 2: Per-Slot Risk
+## 🛑 Layer 2: Per-Slot Risk (Circuit Breakers)
 
-### Circuit Breakers
-| Trigger | Action | Reset |
-|---------|--------|-------|
-| 3 consecutive losses | Pause slot 30 min | Auto-resume after cooldown |
-| Slot drawdown > 25% | Pause slot indefinitely | Manual review required |
-| Single trade loss > 3% | Flag for review | Logged, no auto-pause |
+Each of the 10 slots operates in isolation. A failing slot cannot consume capital from healthy slots.
 
-### Slot Isolation
-- Each slot has **independent** equity tracking
-- Slot PnL does not affect other slots' sizing
-- A failing slot cannot consume capital from healthy slots
-- Each slot maintains its own `peak_equity` and `max_drawdown`
+| Trigger Condition | Action Taken | Resolution |
+|-------------------|--------------|------------|
+| **3 Consecutive Losses** | Slot Paused for 30 mins | Auto-resumes after cooldown |
+| **Slot Drawdown > 25%** | Slot Frozen indefinitely | Requires manual intervention |
+| **Single Loss > 3%** | Flagged as anomaly | Logged; indicates extreme slippage |
 
 ---
 
-## Layer 3: Portfolio Risk
+## 🌍 Layer 3: Portfolio Risk
 
-### Global Kill Switch
+Global limits protect against systemic market crashes or severe algorithmic bugs.
+
+### The Global Kill Switch
 ```
 Portfolio DD = (Peak Equity − Current Equity) / Peak Equity × 100
-If Portfolio DD > 15% → GLOBAL KILL SWITCH → All trading stops
 ```
+> 🔴 **If Portfolio DD > 15% → GLOBAL KILL SWITCH ACTIVATED**
+> All trading halts instantly. All slots are frozen.
 
-### Position Limits
-| Limit | Value |
-|-------|-------|
-| Max positions per slot | 1 |
-| Max global positions | 10 |
-| Max daily trades per slot | 4 |
-| Max portfolio drawdown | 15% |
-
-### Margin Diversification
-- **USDT Pool:** Slots 1-5 ($5,000)
-- **USDC Pool:** Slots 6-10 ($5,000)
-- If one stablecoin depegs, only 50% of capital is at risk
+### Global Constraints
+| Limit | Value | Protection |
+|-------|-------|------------|
+| **Max Slots** | 10 | Caps maximum possible exposure |
+| **Max Global Positions**| 10 | Prevents over-leverage |
+| **Max Daily Trades** | 4 per slot | Prevents overtrading / commission burn |
+| **Margin Split** | 50% USDT / 50% USDC | Mitigates stablecoin depeg risk |
 
 ---
 
-## Layer 4: Execution Risk
+## ⚙️ Layer 4: Execution Risk
+
+Technical protections against infrastructure and latency issues.
 
 ### Drift Guard
-Before placing any order, the system checks if the current price has drifted too far from the signal price:
+If the market moves significantly between signal generation and order placement:
 ```
 Drift = |Current Price − Signal Price| / Signal Price × 100
-If Drift > 0.3% → Reject the signal
 ```
+> 🚫 **If Drift > 0.3% → Signal Rejected** (Prevents entering at terrible prices)
 
-### Order Lifecycle (FSM)
-```
-NEW → VALIDATING → RISK_CHECK → SUBMITTING → ACKNOWLEDGED → FILLED
-                                     ↓
-                                  REJECTED
-```
-Every order transitions through a state machine. Orders cannot skip states.
-
-### Slippage Budget
-- Expected slippage: 0.02% per side
-- Maximum tolerated: 0.3% per side
-- If fill price exceeds slippage budget → log warning
+### Deterministic State Machines (FSM)
+Orders and Positions must transition through strict state machines. They cannot "skip" steps (e.g., an order cannot become `FILLED` without passing `RISK_CHECK`).
 
 ---
 
-## Worst-Case Scenarios
+## 💀 Worst-Case Scenarios
 
-### Scenario 1: Maximum Single-Slot Loss
-```
-10 consecutive losses at 0.5% each (compounding)
-$1,000 → $1,000 × (1 - 0.005)^10 = $951.11
-Max loss = $48.89 (4.9% of slot)
-```
-*Note: Circuit breaker triggers at 3 consecutive losses, preventing this.*
+How the system behaves under extreme duress:
 
-### Scenario 2: All Slots Hit Simultaneously
-```
-All 10 slots lose 0.5% at same time
-Total loss = 10 × $5.00 = $50.00 (0.5% of portfolio)
-```
-*Extremely unlikely due to temporal diversification.*
+### Scenario 1: Slot Death Spiral
+**Event:** A strategy fails completely in a new market regime.
+**Result:** After 3 losses (~1.5% loss), it pauses for 30m. If it continues losing, it hits the 25% slot drawdown limit and is frozen forever. Maximum impact to the total portfolio is 2.5% (since the slot is 1/10th of capital).
 
-### Scenario 3: Black Swan Event
-```
-Market gaps 10% through all stop losses
-Max per-slot loss = ~10% × max_position_value
-With 2.5 ATR max risk, this is approximately 2-3% of slot equity
-Total portfolio impact = ~2-3% ($200-$300)
-```
-*Kill switch triggers at 15% portfolio DD, well before catastrophic.*
+### Scenario 2: Flash Crash
+**Event:** Entire market drops 10% in 1 minute.
+**Result:** Structural stop losses are already resting on the exchange. Some slippage occurs. Max per-slot risk is ~0.5%. Even with 3x slippage across all 10 slots simultaneously, total portfolio impact is ~1.5%.
+
+### Scenario 3: Exchange Outage / Disconnect
+**Event:** Binance goes offline or network drops.
+**Result:** Webhooks fail to deliver or orders fail to submit. The Signal Queue's TTL (Time-To-Live) ensures that when connection restores, old signals are discarded. No stale trades are executed.
 
 ---
 
-## Risk Monitoring
-
-### Real-Time Metrics (Dashboard)
-- Per-slot equity, PnL, drawdown
-- Portfolio total equity and drawdown
-- Open positions count
-- Consecutive loss streaks
-- Circuit breaker status
-
-### Logged Metrics (JSON/CSV)
-- Every trade entry/exit with full pricing
-- Risk decisions (ALLOW/REJECT with reason)
-- Portfolio snapshots every cycle
-- Session reports on shutdown
-
----
-
-## Risk Parameters Summary
-
-| Parameter | Value | Configurable |
-|-----------|-------|-------------|
-| Risk per trade | 0.5% of slot equity | ✅ `config.yaml` |
-| Max risk distance | 2.5 × ATR | ✅ `config.yaml` |
-| TP1 | 1.5R (33% of position) | ✅ |
-| TP2 | 3.0R (33% of position) | ✅ |
-| Trail stop | 1.5 ATR | ✅ |
-| Max consecutive losses | 3 | ✅ |
-| Max slot drawdown | 25% | ✅ |
-| Max portfolio drawdown | 15% | ✅ |
-| Max positions per slot | 1 | ✅ |
-| Max global positions | 10 | ✅ |
-| Max daily trades per slot | 4 | ✅ |
-| Drift tolerance | 0.3% | ✅ |
-| Slippage budget | 0.02% per side | ✅ |
+*All risk parameters are configurable via `config/portfolio_allocation.yaml`.*
