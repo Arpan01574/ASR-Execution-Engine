@@ -8,6 +8,7 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Binance](https://img.shields.io/badge/Binance-Testnet-F0B90B?logo=binance&logoColor=white)](https://testnet.binancefuture.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Download Report](https://img.shields.io/badge/Download-PDF_Report-red?logo=adobeacrobatreader&logoColor=white)](ASR_Execution_Engine_Report.pdf)
 [![Status](https://img.shields.io/badge/Status-Production%20Ready%20(Beta)-brightgreen)]()
 [![Trades Backtested](https://img.shields.io/badge/Trades%20Backtested-15%2C194-orange)]()
 
